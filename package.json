@@ -1,0 +1,33 @@
+{
+  "name": "neocortex",
+  "version": "0.0.3",
+  "description": "AngularJS Modular App Generator",
+  "main": "index.js",
+  "scripts": {
+    "sample": "sh sample-generate.sh"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/leostera/neocortex.git"
+  },
+  "keywords": [
+    "angularjs",
+    "modular",
+    "app",
+    "generator",
+    "neocortex"
+  ],
+  "author": "Leandro Ostera",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/leostera/neocortex/issues"
+  },
+  "dependencies": {
+    "commander": "~2.0.0",
+    "colors": "~0.6.2",
+    "async": "~0.2.9",
+    "q": "~0.9.7",
+    "lodash": "~2.0.0",
+    "underscore.string": "~2.3.3"
+  }
+}
