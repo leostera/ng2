@@ -41,6 +41,11 @@ var generate = function () {
       }
     });
 
+    stuff.push(function (done) {
+      neocortex.cleanup(commander.module)
+      .then(done, done);
+    });
+
     async.series(stuff, function (err) {
       console.log('neocortex'.cyan.bold, 'is HAPPY'.bold);
       if(err) throw err;

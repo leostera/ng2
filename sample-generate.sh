@@ -24,11 +24,12 @@
 #  --provider video\
 
 time node index.js generate --module jobs\
- --directive scrolling,two,three-four-five\
- --controller 'listing list, listing detail, job list, job detail, listing add, job add, search'\
- --filter 'size'\
- --service listing\
- --provider job
+  --controller test
+ # --directive scrolling,two,three-four-five\
+ # --controller 'listing list, listing detail, job list, job detail, listing add, job add, search'\
+ # --filter 'size'\
+ # --service listing\
+ # --provider job
 
 # Go bananas
 # node index.js generate --module random\

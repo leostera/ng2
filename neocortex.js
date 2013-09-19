@@ -12,38 +12,60 @@ var appPath = path.join(root,'app');
 
 var resources = [
     { 
-      name:'module'
-    , deps: []
-    , shortcut: 'm'}
+        name: 'module'
+      , deps: ['component', 'index']
+      , shortcut: 'm'
+      , folder: true
+    }
   , { 
-      name:'controller'
-    , deps: ['view']
-    , shortcut: 'c'}
+        name: 'controller'
+      , deps: ['view']
+      , shortcut: 'c'
+      , folder: true
+    }
+    , { 
+        name: 'directive'
+      , shortcut: 'd'
+      , folder: true
+    }
   , { 
-      name:'directive'
-    , shortcut: 'd'}
+        name: 'filter'
+      , shortcut: 'f'
+      , folder: true
+    }
   , { 
-      name:'filter'
-    , deps: []
-    , shortcut: 'f'}
+        name: 'provider'
+      , shortcut: 'p'
+      , folder: true
+    }
   , { 
-      name:'provider'
-    , deps: []
-    , shortcut: 'p'}
+        name: 'service'
+      , shortcut: 's'
+      , folder: true
+    }
   , { 
-      name:'service'
-    , deps: []
-    , shortcut: 's'}
-  , { 
-      name:'view'
-    , deps: []
-    , shortcut: 'v'}
+        name: 'view'
+      , shortcut: 'v'
+      , folder: true
+    }
+  , {
+        name: 'index'
+      , shortcut: false
+      , folder: false
+    }
+  , {
+        name: 'component'
+      , shortcut: false
+      , folder: false
+    }
 ];
 
 var addExt = function (template, name) {
   var r = name?name:template;
   if(template==='view') {
     r = r+'.html';
+  } else if (template==='component') {
+    r = r+'.json';
   } else {
     r = r+'.js';
   }
@@ -63,6 +85,8 @@ var parseTemplate = function (template, obj) {
         obj._s = _s;
         obj._ = _;
         obj.app = appName;
+        obj.files = obj.files || "[]";
+        obj.exports = obj.exports || "{}";
         var res = _.template(data.toString())(obj);
         deferred.resolve(res);
       });
@@ -74,6 +98,28 @@ var parseTemplate = function (template, obj) {
 
   return deferred.promise;
 };
+
+var updateIndexes = function (files) {
+  var deferred = q.defer();
+
+  var module = files[0].module;
+  // read component.json
+  var componentsFile = path.join(path.join(appPath,module),'component.json');
+  fs.readFile(componentsFile, function (err, data) {
+    if(err) throw err;
+    var components = JSON.parse(data);
+    components.scripts = files.map(function (f) {
+      return addExt(f.template, f.module+'/'+f.name);
+    });
+    console.log(components.scripts);
+    fs.writeFile(componentsFile, JSON.stringify(components), function (err) {
+      if(err) throw err;
+      deferred.resolve(null);
+    })
+  });
+ 
+  return deferred.promise;
+}
 
 var createFile = function (template, obj, dest) {
   var deferred = q.defer();
@@ -116,8 +162,9 @@ module.exports = {
         throw 'to generate a module use neocortex.module(name)';
       }
       d.name = _s.dasherize(d.name);
+      d.top = d.top || false;
       var depsList = _.where(this.resources, {name: d.template});
-      var filePath = appPath+'/'+d.module+'/'+d.template+'s/'+d.name;
+      var filePath = appPath+'/'+d.module+'/'+((d.top)?'':d.template+'s/')+d.name;
       foos.push(function (done) {
         createFile(d.template, d, filePath)
           .then(function (weGood) {
@@ -143,14 +190,20 @@ module.exports = {
       }.bind(this));
     }.bind(this));
 
-    async.parallel(foos, function (err) {
+    async.series(foos, function (err) {
       if(err) throw err;
       if(!data[0].deps) {
         console.log('Generated'.cyan,size.cyan,data[0].template.cyan+'s'.cyan,
           (data[0].template === 'controller') ? 'and their views'.cyan : '','✓','\n');
       }
+
+      this.updateIndexes(data).then( function () {
+        deferred.resolve(null);
+      }, function (err) { 
+        deferred.reject(err);
+      });
       deferred.resolve(null);
-    });
+    }.bind(this));
 
     return deferred.promise;
   }
@@ -161,6 +214,32 @@ module.exports = {
       return !fd ? deferred.resolve(null) : deferred.reject(fd);
     });
 
+    return deferred.promise;
+  }
+
+  , cleanup: function (name) {
+    var deferred = q.defer();
+    name = path.join(appPath,name);
+    fs.readdir(name, function (err, subfolders) {
+      if(err) throw err;
+      async.each(subfolders, function (sf, cb) {
+        if(sf.split('.').length > 1) return;
+        sf = path.join(name,sf);
+        fs.readdir(sf, function (err, files) {
+          if(!files.length) {
+            return fs.rmdir(sf, function (err) {
+              if(err) throw err;
+              cb(null);
+            });
+          }
+          cb(null);
+        })
+      }, function (err) {
+        if(err) throw err;
+        console.log('neocortex'.cyan.bold,'clean up complete'.bold);
+        deferred.resolve(null);
+      })
+    });
     return deferred.promise;
   }
 
@@ -175,8 +254,9 @@ module.exports = {
       var scaffoldDeferred = q.defer();
 
       async.each(this.resources , function (res, cb) {
-        var typePath = path.join(modulePath,res.name+'s');
-        if(res.name !== 'module') {
+        var typePath = modulePath;
+        if(res.name !== 'module' && res.folder) {
+          typePath = path.join(typePath, res.name+'s');
           this.exists(typePath).then(function () {
             console.log('creating folder'.cyan,res.name.cyan+'s'.cyan,'at'.cyan,typePath.split('/').slice(4).join('/'));
             fs.mkdir(typePath, cb);
@@ -184,8 +264,13 @@ module.exports = {
             console.log('skipping'.yellow,res.name.yellow+'s'.yellow);
             cb(null);
           });
+        } else if (res.deps) {
+          var stuff = res.deps.map(function (d) {
+            return {template: d, name: d, module: name, top: true};
+          })
+          this.generate(stuff).then(cb,cb);
         } else {
-          cb(null)
+          cb(null);
         }
       }.bind(this)
       , function (err) {

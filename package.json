@@ -17,7 +17,7 @@
     "generator",
     "neocortex"
   ],
-  "author": "Leandro Ostera",
+  "author": "Leandro Ostera <me@leostera.com>",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/leostera/neocortex/issues"

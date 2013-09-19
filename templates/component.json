@@ -1,0 +1,10 @@
+{
+  "name": "${module}",
+  "repo": "${app}/${module}",
+  "description": "",
+  "version": "0.1.0",
+  "keywords": [],
+  "dependencies": {},
+  "development": {},
+  "scripts": <%= files %>
+}
