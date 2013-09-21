@@ -1,10 +1,10 @@
 /**
  * @ngdoc directive
- * @name ${_s.camelize(app)}.${_s.camelize(module)}:Directives.${_s.camelize(name)}
+ * @name ${_s.camelize(module)}.directives:${_s.camelize(name)}
  * @description
  * ...
  */
-angular('${_s.camelize(app)}.${_s.camelize(module)}')
+angular('${_s.camelize(module)}.')
   .directives('${_s.camelize(name)}',['$scope', function ($scope) {
     'use strict';
     
@@ -17,7 +17,7 @@ angular('${_s.camelize(app)}.${_s.camelize(module)}')
         /**
          * @ngdoc method
          * @name fromField
-         * @methodOf ${_s.camelize(app)}.${_s.camelize(module)}:Directives.${_s.camelize(name)}
+         * @methodOf ${_s.camelize(module)}.directives:${_s.camelize(name)}
          * @param  {Number, String} number Just the number that has been input.
          * @return {Number}        The number.
          */
@@ -28,7 +28,7 @@ angular('${_s.camelize(app)}.${_s.camelize(module)}')
         /**
          * @ngdoc method
          * @name toField
-         * @methodOf ${_s.camelize(app)}.${_s.camelize(module)}:Directives.${_s.camelize(name)}
+         * @methodOf ${_s.camelize(module)}.directives:${_s.camelize(name)}
          * @param  {Number, String} number Just the number that has been input.
          * @return {Number}        The number or 0.
          */

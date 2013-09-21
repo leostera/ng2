@@ -1,11 +1,11 @@
 /**
  * @ngdoc filter
- * @name ${_s.camelize(app)}.${_s.camelize(module)}:Filters.${_s.camelize(name)}
+ * @name ${_s.camelize(module)}.filters:${_s.camelize(name)}
  * @description
  * 
  * Filters a collection with a simple regex.
  */
-angular('${_s.camelize(app)}.${_s.camelize(module)}')
+angular('${_s.camelize(module)}')
   .filter('${_s.camelize(name)}',['$scope'
   , function ($scope) {
     return function(str, letter, prop){

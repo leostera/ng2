@@ -1,18 +1,18 @@
 /**
  * @ngdoc service
- * @name ${_s.camelize(app)}.${_s.camelize(module)}:Services.${_s.camelize(name)}
+ * @name ${_s.camelize(module)}.services:${_s.camelize(name)}
  * @description
  * ...
  */
 angular
-.module('${_s.camelize(app)}.${_s.camelize(module)}')
+.module('${_s.camelize(module)}')
 .factory('${_s.classify(name)}', function () {
   return {
 
     /**
      * @ngdoc function
      * @name init
-     * @methodOf ${_s.camelize(app)}.${_s.camelize(module)}:Services.${_s.camelize(name)}
+     * @methodOf ${_s.camelize(module)}.services:${_s.camelize(name)}
      * @description 
      * ...
      */
@@ -24,7 +24,7 @@ angular
     /**
      * @ngdoc property
      * @name dataBrowser
-     * @propertyOf ${_s.camelize(app)}.${_s.camelize(module)}:Services.${_s.camelize(name)}
+     * @propertyOf ${_s.camelize(module)}.services:${_s.camelize(name)}
      * @type {Array}
      * @description 
      * Array of known Browsers.

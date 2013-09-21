@@ -1,33 +1,32 @@
 {
-  "name": "neocortex",
-  "version": "0.0.3",
+  "name": "ntropy",
+  "version": "0.1.0",
   "description": "AngularJS Modular App Generator",
-  "main": "index.js",
-  "scripts": {
-    "sample": "sh sample-generate.sh"
-  },
+  "main": "index",
   "repository": {
     "type": "git",
-    "url": "git://github.com/leostera/neocortex.git"
+    "url": "git://github.com/leostera/ntropy.git"
   },
   "keywords": [
     "angularjs",
     "modular",
     "app",
     "generator",
-    "neocortex"
+    "ntropy"
   ],
   "author": "Leandro Ostera <me@leostera.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/leostera/neocortex/issues"
+    "url": "https://github.com/leostera/ntropy/issues"
   },
   "dependencies": {
     "commander": "~2.0.0",
     "colors": "~0.6.2",
-    "async": "~0.2.9",
-    "q": "~0.9.7",
     "lodash": "~2.0.0",
-    "underscore.string": "~2.3.3"
+    "underscore.string": "~2.3.3",
+    "anchorman": "0.1.1"
+  },
+  "bin": {
+    "ntropy": "./bin/ntropy"
   }
 }

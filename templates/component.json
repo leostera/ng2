@@ -1,10 +1,18 @@
 {
-  "name": "${module}",
-  "repo": "${app}/${module}",
+  "name": "project",
+  "repo": "username/project",
   "description": "",
-  "version": "0.1.0",
+  "version": "0.0.1",
   "keywords": [],
   "dependencies": {},
   "development": {},
-  "scripts": <%= files %>
+  "license": "MIT",
+  "main": "index.js",
+  "scripts": [
+    "index.js",
+    "template.js"
+  ],
+  "styles": [
+    "project.css"
+  ]
 }

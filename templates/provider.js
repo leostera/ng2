@@ -1,24 +1,24 @@
 /**
 * @ngdoc service
-* @name ${_s.camelize(app)}.${_s.camelize(module)}:Providers.${_s.camelize(name)}Provider
+* @name ${_s.camelize(module)}.providers:${_s.camelize(name)}Provider
 * @description
 * Provider configuration docs.
 */
 
 /**
 * @ngdoc service
-* @name ${_s.camelize(app)}.${_s.camelize(module)}:Services.${_s.camelize(name)}
+* @name ${_s.camelize(module)}.services:${_s.camelize(name)}
 * @description
 * Service consumption docs.
 */
 
 angular
-.module('${_s.camelize(app)}.${_s.camelize(module)}')
+.module('${_s.camelize(module)}')
 .provider('${_s.classify(name)}', function () {
   /**
    * @name providerVariable
    * @type {Object}
-   * @propertyOf ${_s.camelize(app)}.${_s.camelize(module)}:Providers.${_s.camelize(name)}Provider
+   * @propertyOf ${_s.camelize(module)}.providers:${_s.camelize(name)}Provider
    * @description
    * ...
    */
@@ -38,7 +38,7 @@ angular
       /**
        * @ngdoc function
        * @name providerVariable.foo
-       * @propertyOf ${_s.camelize(app)}.${_s.camelize(module)}:Providers.${_s.camelize(name)}Provider
+       * @propertyOf ${_s.camelize(module)}.providers:${_s.camelize(name)}Provider
        * @description 
        * This is still not publicly accessible from your service.
        */
@@ -49,7 +49,7 @@ angular
       /**
        * @ngdoc function
        * @name serviceFoo
-       * @propertyOf ${_s.camelize(app)}.${_s.camelize(module)}:Services.${_s.camelize(name)}
+       * @propertyOf ${_s.camelize(module)}.services:${_s.camelize(name)}
        * @description
        * Private service function.
        */
@@ -61,7 +61,7 @@ angular
         /**
          * @name publicFoo
          * @ngdoc function
-         * @methodOf ${_s.camelize(app)}.${_s.camelize(module)}:Services.${_s.camelize(name)}
+         * @methodOf ${_s.camelize(module)}.services:${_s.camelize(name)}
          * @return {Object} Something
          */
         publicfoo: function () {
@@ -73,7 +73,7 @@ angular
 
     /**
      * @ngdoc function
-     * @methodOf ${_s.camelize(app)}.${_s.camelize(module)}:Providers.${_s.camelize(name)}Provider
+     * @methodOf ${_s.camelize(module)}.providers:${_s.camelize(name)}Provider
      * @name setOption
      * @param  {String} usr the user service name
      * @description
