@@ -45,6 +45,7 @@ cli
   .description('\t\tscaffold a controller'.grey)
   .action(function (name) {
     ntropy.scaffold('controller',name);
+    ntropy.scaffold('view',name);
   });
 
 cli
