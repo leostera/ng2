@@ -121,5 +121,51 @@ module.exports = {
     this.reporter.broadcast('info', 'updated component.json');
 
     this.reporter.broadcast('log', 'scaffolded '+name);
+  },
+
+  /**
+   * @name start
+   * @description
+   * Scaffold a barebones app.
+   */
+  start: function (name) {
+    var folder;
+    if(name === '.' || name === './') {
+      name = process.cwd().split('/').pop();
+      folder = process.cwd();
+      this.reporter.broadcast('info','using current working directory as app name: '+name);
+    } else {
+      folder = path.join(process.cwd(),name);
+      this.reporter.broadcast('info','using current working directory as app root: '+folder);
+      if(!fs.existsSync(folder)) {
+        fs.mkdirSync(folder);
+        this.reporter.broadcast('info','created app root at '+folder);
+      } else {
+        this.reporter.broadcast('error','app root at '+folder+' not empty!');
+      }
+    }
+    if(!fs.existsSync(path.join(folder, 'modules'))) {
+      fs.mkdirSync(path.join(folder,'modules'));
+      this.reporter.broadcast('info','created modules folder at '+folder+'/modules');
+    } else {
+      this.reporter.broadcast('info','using modules folder at '+folder+'/modules');
+    }
+
+    fs.writeFileSync(path.join(folder,'.gitignore'), 'components\nnode_modules');
+    this.reporter.broadcast('info','crafted git ignore at '+folder+'/.gitignore');
+
+    var readme = ['# '+name+'\n',
+      '> ntropy scaffolded this app for you, everything\'s stable now',
+      '',
+      '### Install components using `component`',
+      '',
+      '### This readme is a WIP!'].join(' \n');
+
+    fs.writeFileSync(path.join(folder,'README.md'), readme)
+    this.reporter.broadcast('info','crafted readme file at '+folder+'/readme.md');
+
+    this.reporter.broadcast('log','scaffolded application at '+folder);
+    this.reporter.broadcast('log','\n\nmake sure you have component installed');
+    this.reporter.broadcast('log','\n\nand then just go component install to get new components');
   }
 }

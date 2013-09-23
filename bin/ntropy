@@ -34,6 +34,13 @@ cli
   .option('-v, --verbose', 'verbose mode')
 
 cli
+  .command('start <name>')
+  .description('\t\tscaffold a barebones app'.grey)
+  .action(function (name) {
+    ntropy.start(name);
+  });
+
+cli
   .command('module <username/name>')
   .description('\t\tscaffold a module'.grey)
   .action(function (name) {
