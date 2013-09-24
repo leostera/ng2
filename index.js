@@ -123,6 +123,10 @@ module.exports = {
     this.reporter.broadcast('log', 'scaffolded '+name);
   },
 
+  build: function () {
+    this.reporter.broadcast('error', 'this feature is not yet available');
+  },
+
   /**
    * @name start
    * @description
