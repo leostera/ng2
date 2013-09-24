@@ -24,8 +24,6 @@ anchorman.on('info', function  (data) {
   }
 });
 
-console.log('ntropy'.cyan.bold, 'v'.cyan+version.toString().cyan);
-
 ntropy.reporter = anchorman;
 ntropy.bootstrap();
 
@@ -115,5 +113,3 @@ cli
   })
 
 cli.parse(process.argv);
-
-console.log('ntropy'.cyan.bold, 'OK!'.cyan,'\n');

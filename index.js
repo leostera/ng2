@@ -164,8 +164,8 @@ module.exports = {
     fs.writeFileSync(path.join(folder,'README.md'), readme)
     this.reporter.broadcast('info','crafted readme file at '+folder+'/readme.md');
 
-    this.reporter.broadcast('log','scaffolded application at '+folder);
-    this.reporter.broadcast('log','\n\nmake sure you have component installed');
-    this.reporter.broadcast('log','\n\nand then just go component install to get new components');
+    this.reporter.broadcast('log','scaffolded application at '+folder+'\n\n');
+    this.reporter.broadcast('log','make sure you have component installed');
+    this.reporter.broadcast('log','and then just go component install to get new components');
   }
 }
