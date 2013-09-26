@@ -93,7 +93,7 @@ module.exports = {
     // Now let's update the locals at the top-most component.json
     component = null;
     component = utils.readFileToObject(path.join(this.config.root, 'component.json'));
-    component.locals = _.unique(component.locals.concat([name]));
+    component.local = _.unique(component.local.concat([name]));
     utils.dumpObjectToFile(path.join(this.config.root, 'component.json'), component);
 
     this.reporter.broadcast('log', 'module scaffolded at '+moduleDir);
