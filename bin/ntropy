@@ -102,6 +102,9 @@ cli
     ntropy.scaffold('controller',name+'-list');
     ntropy.scaffold('controller',name+'-detail');
     ntropy.scaffold('controller',name+'-edit');
+    ntropy.scaffold('view',name+'-list');
+    ntropy.scaffold('view',name+'-detail');
+    ntropy.scaffold('view',name+'-edit');
     ntropy.scaffold('resource',name);
   });
 
