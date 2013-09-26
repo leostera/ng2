@@ -22,4 +22,4 @@ angular('${_s.camelize(module)}')
         return filtered;
       };
     };
-  });
+  }]);

@@ -40,4 +40,4 @@ angular('${_s.camelize(module)}')
       }
     };  
   };
-});
+}]);

@@ -9,10 +9,8 @@
   "license": "MIT",
   "main": "index.js",
   "scripts": [
-    "index.js",
-    "template.js"
+    "index.js"
   ],
   "styles": [
-    "project.css"
   ]
 }
