@@ -21,7 +21,7 @@ anchorman.on('error', function  (data) {
     data = JSON.stringify(data, null,4);
   }
   console.log('error: '.red.bold, data.red);
-  process.exit(0);
+  process.exit(-1);
 });
 
 anchorman.on('info', function  (data) {
@@ -102,6 +102,13 @@ cli
   .description('\t\tscaffold a view'.grey)
   .action(function (name) {
     ntropy.scaffold('view',name);
+  });
+
+cli
+  .command('style <name>')
+  .description('\t\tscaffold a stylesheet'.grey)
+  .action(function (name) {
+    ntropy.scaffold('style',name);
   });
 
 cli

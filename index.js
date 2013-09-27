@@ -66,9 +66,9 @@ module.exports = {
 
     var moduleDir;
     if(/\/modules$/.test(this.config.root)) {
-      moduleDir = path.join(this.config.root,name);
+      moduleDir = path.join(this.config.root, name);
     } else {
-      moduleDir = path.join(path.join(this.config.root,'modules'),name);
+      moduleDir = path.join(this.config.root, 'modules', name);
     }
 
     if(fs.existsSync(moduleDir)) {
@@ -121,11 +121,17 @@ module.exports = {
       this.reporter.broadcast('info', 'created folder '+template.bold+' at '+typeDir);
     }
 
-    var filePath = path.join(typeDir, _s.dasherize(name));
-    filePath += template === 'view' ? '.html' : '.js';
+    var ext = template === 'view'
+      ? '.html'
+      : template === 'style'
+        ? '.less'
+        : '.js';
 
-    var templatePath = path.join(path.join(__dirname,'templates'),template);
-    templatePath += template === 'view' ? '.html' : '.js';
+    var filePath = path.join(typeDir, _s.dasherize(name));
+    filePath += ext;
+
+    var templatePath = path.join(__dirname,'templates',template);
+    templatePath += ext;
 
     var object = {
       module: this.config.module.name,
@@ -136,13 +142,13 @@ module.exports = {
     this.reporter.broadcast('info', 'created file '+_s.dasherize(name)+' at '+filePath);
 
     var component = utils.readFileToObject(path.join(this.config.root,'component.json'));
-    component.scripts = _.unique(
-      component.scripts.concat(
+    component[template === 'style' ? "styles" : "scripts"] = _.unique(
+      component[template === 'style' ? "styles" : "scripts"].concat(
         fs.readdirSync(typeDir).map(function (file) {
           if(template === 'view') {
-            file = file.split('.');
-            file.pop();
-            file = file.concat('js').join('.');
+            file = file.replace(/.html$/ig, '.js');
+          } else if (template === 'style') {
+            file = file.replace(/.less$/ig, '.css');
           }
           return path.join( template+'s', file );
         })
@@ -161,38 +167,105 @@ module.exports = {
    * the local templates from html to js.
    */
   build: function () {
-    // this.reporter.broadcast('error', 'this feature is not yet available');
+    if(this.config.module) {
+      this.reporter.broadcast('error', 'trying to build from inside a module? don\'t');
+    }
+
+    if(/modules$/.test(this.config.root)) {
+      this.reporter.broadcast('error', 'trying to build from the modules folder? don\'t');
+    }
+
     var Builder = require('component-builder')
-      , str2js  = require('string-to-js');
+      , str2js  = require('string-to-js')
+      , less    = require('less');
 
     var convertTemplate = function (builder) {
       // hook into the "before scripts" event
-      this.reporter.broadcast('info', 'setting up before scripts hook');
+      this.reporter.broadcast('info', 'setting up convert-template before script hook');
       builder.hook('before scripts', function (pkg, fn) {
         // check if we have .scripts in component.json
         var tmpls = pkg.config.scripts;
-        if (!tmpls) return fn();
+        if (!tmpls || !tmpls.length) {
+          this.reporter.broadcast('info', 'convert-template hook triggered without templates');
+          return fn();
+        }
 
-        this.reporter.broadcast('info', 'hook triggered with this build config');
+        this.reporter.broadcast('info', 'convert-template hook triggered with this build config');
         this.reporter.broadcast('info', pkg.config);
 
         // translate templates
         tmpls.forEach(function (file){
-          // only .html files
+          // only views
+          if (!/views/ig.test(file)) return;
+
+          this.reporter.broadcast('log', 'processing '+file);
+
           var ext = path.extname(file);
-          if ('.html' != ext) return;
+          var originalFile = file;
+          var file = pkg.path(file);
+
+          if(ext === '.js') {
+            file = file.replace(/.js$/ig, '.html');
+          }
 
           // read the file
-          file = pkg.path(file);
           var str = fs.readFileSync(file, 'utf8');
           var fn = str2js(str);
+          newFile = file.replace(/.html$/ig,'.js');
 
-          newFile = file.replace(/.html/ig,'.js');
-          this.reporter.broadcast('info', "Converting "+file+" to "+newFile+" as:");
-          this.reporter.broadcast('info', fn);
           fs.writeFileSync(newFile, fn);
-          pkg.addFile('scripts', newFile);
+          pkg.addFile('scripts', originalFile.replace(/.html$/ig,'.js'));
           pkg.removeFile('scripts', file);
+
+          this.reporter.broadcast('info', "Converted "+file)
+          this.reporter.broadcast('info', "to "+newFile+" as:");
+          this.reporter.broadcast('info', fn);
+
+        }.bind(this));
+
+        fn();
+      }.bind(this));
+    }.bind(this);
+
+    var compileLess = function (builder) {
+      this.reporter.broadcast('info', 'setting up compile-less before script hook');
+      builder.hook('before scripts', function (pkg, fn) {
+        // check if we have .styles in component.json
+        var styles = pkg.config.styles;
+        if (!styles || !styles.length) {
+          this.reporter.broadcast('info', 'compile-less hook triggered without styles');
+          return fn();
+        }
+
+        this.reporter.broadcast('info', 'compile-less hook triggered with this build config');
+        this.reporter.broadcast('info', pkg.config);
+
+        // translate templates
+        styles.forEach(function (file){
+          // only styles
+          if (!/styles/ig.test(file)) return;
+
+          this.reporter.broadcast('log', 'processing '+file);
+
+          var ext = path.extname(file);
+          var file = pkg.path(file);
+          if(ext === '.css') {
+            file = file.replace(/.css$/ig, '.less');
+          }
+
+          // read the file
+          var str = fs.readFileSync(file, 'utf8');
+          newFile = file.replace(/.less$/ig,'.css');
+
+          less.render(str, function (e, css) {
+            if(e) this.reporter.broadcast('error', e);
+            fs.writeFileSync(newFile, css);
+
+            this.reporter.broadcast('info', "Converted "+file)
+            this.reporter.broadcast('info', "to "+newFile+" as:");
+            this.reporter.broadcast('info', css);
+          }.bind(this));
+
         }.bind(this));
 
         fn();
@@ -201,11 +274,13 @@ module.exports = {
 
     var start = new Date;
 
-    var component = utils.readFileToObject('/Users/leostera/Repositories/leostera.com/component.json');
+    var component = utils.readFileToObject(path.join(this.config.root,'component.json'));
 
     if(!component) {
       this.reporter.broadcast('error', 'There\'s no component.json at '+this.config.root);
     }
+
+    this.reporter.broadcast('info', 'Reading component.json from '+this.config.root+'/component.json');
 
     var local = component.local.map(function (l) {
       return this.config.root+'/modules/'+l;
@@ -227,19 +302,17 @@ module.exports = {
     this.reporter.broadcast('log', 'building '+this.config.root.split('/').pop().bold);
     this.reporter.broadcast('info', 'bootstrapped builder at '+this.config.root);
 
+    builder.use(convertTemplate);
+    builder.use(compileLess);
+
     component.paths.forEach(function (p) {
       builder.addLookup(path.join(this.config.root,p));
     }.bind(this));
 
-    builder.use(convertTemplate);
-
     builder.copyAssetsTo(path.join(this.config.root,'build'));
     builder.build( function (err, obj) {
       if (err) this.reporter.broadcast('error', err);
-      if(fs.exists(path.join(this.config.root,'build'))) {
-        fs.rmdirSync(path.join(this.config.root,'build'));
-      }
-      fs.writeFileSync(path.join(this.config.root,'build/build.js'), obj.require + obj.js);
+      if (obj.js) fs.writeFileSync(path.join(this.config.root,'build/build.js'), obj.require + obj.js);
       if (obj.css) fs.writeFileSync(path.join(this.config.root,'build/build.css'), obj.css);
     }.bind(this));
 
@@ -292,7 +365,7 @@ module.exports = {
     utils.dumpObjectToFile(path.join(folder,'component.json'), component);
     this.reporter.broadcast('info','crafted component.json at '+folder+'/component.json');
 
-    var templatePath = path.join(path.join(__dirname,'templates'),'index.html');
+    var templatePath = path.join(__dirname,'templates','index.html');
     var object = {
       app: name
     };
