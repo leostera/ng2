@@ -175,6 +175,10 @@ module.exports = {
       this.reporter.broadcast('error', 'trying to build from the modules folder? don\'t');
     }
 
+    if(!fs.existsSync(path.join(this.config.root,'build'))) {
+      fs.mkdirSync(path.join(this.config.root,'build'));
+    }
+
     var Builder = require('component-builder')
       , str2js  = require('string-to-js')
       , less    = require('less');
