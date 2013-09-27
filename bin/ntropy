@@ -10,15 +10,24 @@ var ntropy = require('ntropy')
   , anchorman = require('anchorman');
 
 anchorman.on('log', function  (data) {
+  if(typeof data === 'object') {
+    data = JSON.stringify(data, null,4);
+  }
   console.log('log: '.blue, data.grey);
 });
 
 anchorman.on('error', function  (data) {
+  if(typeof data === 'object') {
+    data = JSON.stringify(data, null,4);
+  }
   console.log('error: '.red.bold, data.red);
   process.exit(0);
 });
 
 anchorman.on('info', function  (data) {
+  if(typeof data === 'object') {
+    data = JSON.stringify(data, null,4);
+  }
   if(cli.verbose) {
     console.log('info: '.magenta, data.grey);
   }

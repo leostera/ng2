@@ -22,6 +22,8 @@ module.exports = {
       throw 'ntropy needs a reporter';
     }
 
+    this.reporter.broadcast('info',"bootstrapping");
+
     if(this.config.root) {
       this.reporter.broadcast('error', 'ntropy has already been bootstrapped');
       this.reporter.broadcast('error', 'nirvana is near');
@@ -152,8 +154,98 @@ module.exports = {
     this.reporter.broadcast('log', 'scaffolded '+name+' '+template);
   },
 
+  /**
+   * @name build
+   * @description
+   * Perform a build of all the local modules and component converting all
+   * the local templates from html to js.
+   */
   build: function () {
-    this.reporter.broadcast('error', 'this feature is not yet available');
+    // this.reporter.broadcast('error', 'this feature is not yet available');
+    var Builder = require('component-builder')
+      , str2js  = require('string-to-js');
+
+    var convertTemplate = function (builder) {
+      // hook into the "before scripts" event
+      this.reporter.broadcast('info', 'setting up before scripts hook');
+      builder.hook('before scripts', function (pkg, fn) {
+        // check if we have .scripts in component.json
+        var tmpls = pkg.config.scripts;
+        if (!tmpls) return fn();
+
+        this.reporter.broadcast('info', 'hook triggered with this build config');
+        this.reporter.broadcast('info', pkg.config);
+
+        // translate templates
+        tmpls.forEach(function (file){
+          // only .html files
+          var ext = path.extname(file);
+          if ('.html' != ext) return;
+
+          // read the file
+          file = pkg.path(file);
+          var str = fs.readFileSync(file, 'utf8');
+          var fn = str2js(str);
+
+          newFile = file.replace(/.html/ig,'.js');
+          this.reporter.broadcast('info', "Converting "+file+" to "+newFile+" as:");
+          this.reporter.broadcast('info', fn);
+          fs.writeFileSync(newFile, fn);
+          pkg.addFile('scripts', newFile);
+          pkg.removeFile('scripts', file);
+        }.bind(this));
+
+        fn();
+      }.bind(this));
+    }.bind(this);
+
+    var start = new Date;
+
+    var component = utils.readFileToObject('/Users/leostera/Repositories/leostera.com/component.json');
+
+    if(!component) {
+      this.reporter.broadcast('error', 'There\'s no component.json at '+this.config.root);
+    }
+
+    var local = component.local.map(function (l) {
+      return this.config.root+'/modules/'+l;
+    }.bind(this));
+
+    this.reporter.broadcast('info', "Building local modules");
+    this.reporter.broadcast('info', local);
+
+    var dependencies = Object.keys(component.dependencies).map( function (d) {
+      return this.config.root+'/components/'+d.replace(/\//ig,'-');
+    }.bind(this));
+
+    this.reporter.broadcast('info', "Building dependencies");
+    this.reporter.broadcast('info', dependencies);
+
+    dependencies = dependencies.concat(local);
+
+    var builder = new Builder(this.config.root);
+    this.reporter.broadcast('log', 'building '+this.config.root.split('/').pop().bold);
+    this.reporter.broadcast('info', 'bootstrapped builder at '+this.config.root);
+
+    component.paths.forEach(function (p) {
+      builder.addLookup(path.join(this.config.root,p));
+    }.bind(this));
+
+    builder.use(convertTemplate);
+
+    builder.copyAssetsTo(path.join(this.config.root,'build'));
+    builder.build( function (err, obj) {
+      if (err) this.reporter.broadcast('error', err);
+      if(fs.exists(path.join(this.config.root,'build'))) {
+        fs.rmdirSync(path.join(this.config.root,'build'));
+      }
+      fs.writeFileSync(path.join(this.config.root,'build/build.js'), obj.require + obj.js);
+      if (obj.css) fs.writeFileSync(path.join(this.config.root,'build/build.css'), obj.css);
+    }.bind(this));
+
+    var duration = new Date - start;
+    var time = '– '+duration+'ms';
+    this.reporter.broadcast('log', 'build completed '+time)
   },
 
   /**

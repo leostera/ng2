@@ -4,7 +4,7 @@ var fs = require('fs')
 
 module.exports = {
   readFileToObject: function (source) {
-    return JSON.parse(fs.readFileSync(source).toString());
+    return JSON.parse(fs.readFileSync(source).toString()) || false;
   },
 
   dumpObjectToFile: function (dest, object) {
@@ -14,6 +14,6 @@ module.exports = {
   compileTemplate: function (template, object) {
     object._ = _;
     object._s = _s;
-    return _.template(fs.readFileSync(template).toString())(object);
+    return _.template(fs.readFileSync(template).toString())(object) || false;
   }
 }
