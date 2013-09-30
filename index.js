@@ -379,8 +379,12 @@ module.exports = {
     var readme = ['# '+name+'\n',
       '> ntropy zero app',
       '',
-      '### Install components using `component`',
-      '',
+      '## Install',
+      'Do `component install` to get all the components you need.',
+      '## Now what?',
+      'For help with ntropy run `ntropy help`',
+      '## Building',
+      'Just do `ntropy build`'
       '### This readme is a WIP!'].join(' \n');
 
     fs.writeFileSync(path.join(folder,'README.md'), readme)
