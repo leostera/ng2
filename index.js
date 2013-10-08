@@ -369,7 +369,7 @@ module.exports = {
       this.reporter.broadcast('info','created modules folder at '+folder+'/modules');
 
       var exec = require('exec-sync');
-      exec('git clone --depth https://github.com/ng2/core.git modules/ng2-core');
+      exec('git clone --depth 1 https://github.com/ng2/core.git '+folder+'/modules/ng2-core');
     } else {
       this.reporter.broadcast('info','using modules folder at '+folder+'/modules');
     }
