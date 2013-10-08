@@ -1,5 +1,6 @@
 # ng2
 > the beginning of a modular angular.js app generator
+> disclaimer: this is an alpha project under heavy development
 
 ### installation
 
