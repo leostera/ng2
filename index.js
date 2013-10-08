@@ -359,11 +359,11 @@ module.exports = {
     var component = {
       dependencies: {
         "leostera/angular.js": "*",
-        "n-tropy/core": "*"
+        "ng2/ng2-core": "*"
       },
       remotes: [],
-      locals: [],
-      paths: ["./modules"]
+      local: [],
+      paths: ["./components", "./modules"]
     };
 
     utils.dumpObjectToFile(path.join(folder,'component.json'), component);
@@ -382,9 +382,9 @@ module.exports = {
       '## Install',
       'Do `component install` to get all the components you need.',
       '## Now what?',
-      'For help with ntropy run `ntropy help`',
+      'For help with ng2 run `ng2 help`',
       '## Building',
-      'Just do `ntropy build`'
+      'Just do `ng2 build`'
       '### This readme is a WIP!'].join(' \n');
 
     fs.writeFileSync(path.join(folder,'README.md'), readme)
