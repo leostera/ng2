@@ -6,7 +6,7 @@ var cli     = require('commander')
   , version = pkg.version
   , colors  = require('colors')
 
-var ntropy = require('ntropy')
+var ng2 = require('ng2')
   , anchorman = require('anchorman');
 
 anchorman.on('log', function  (data) {
@@ -33,8 +33,8 @@ anchorman.on('info', function  (data) {
   }
 });
 
-ntropy.reporter = anchorman;
-ntropy.bootstrap();
+ng2.reporter = anchorman;
+ng2.bootstrap();
 
 cli
   .version(version)
@@ -44,91 +44,91 @@ cli
   .command('start <name>')
   .description('\t\tscaffold a barebones app'.grey)
   .action(function (name) {
-    ntropy.start(name);
+    ng2.start(name);
   });
 
 cli
   .command('module <username/name>')
   .description('\t\tscaffold a module'.grey)
   .action(function (name) {
-    ntropy.module(name);
+    ng2.module(name);
   });
 
 cli
   .command('controller <name>')
   .description('\t\tscaffold a controller'.grey)
   .action(function (name) {
-    ntropy.scaffold('controller',name);
-    ntropy.scaffold('view',name);
+    ng2.scaffold('controller',name);
+    ng2.scaffold('view',name);
   });
 
 cli
   .command('directive <name>')
   .description('\t\tscaffold a directive'.grey)
   .action(function (name) {
-    ntropy.scaffold('directive',name);
+    ng2.scaffold('directive',name);
   });
 
 cli
   .command('filter <name>')
   .description('\t\tscaffold a filter'.grey)
   .action(function (name) {
-    ntropy.scaffold('filter',name);
+    ng2.scaffold('filter',name);
   });
 
 cli
   .command('provider <name>')
   .description('\t\tscaffold a provider'.grey)
   .action(function (name) {
-    ntropy.scaffold('provider',name);
+    ng2.scaffold('provider',name);
   });
 
 cli
   .command('service <name>')
   .description('\t\tscaffold a service'.grey)
   .action(function (name) {
-    ntropy.scaffold('service',name);
+    ng2.scaffold('service',name);
   });
 
 cli
   .command('test <type> <name>')
   .description('\t\tscaffold a test'.grey)
   .action(function (type, name) {
-    ntropy.scaffold('test-'+type,name);
+    ng2.scaffold('test-'+type,name);
   });
 
 cli
   .command('view <name>')
   .description('\t\tscaffold a view'.grey)
   .action(function (name) {
-    ntropy.scaffold('view',name);
+    ng2.scaffold('view',name);
   });
 
 cli
   .command('style <name>')
   .description('\t\tscaffold a stylesheet'.grey)
   .action(function (name) {
-    ntropy.scaffold('style',name);
+    ng2.scaffold('style',name);
   });
 
 cli
   .command('resource <name>')
   .description('\t\tscaffold a full resource'.grey)
   .action(function (name) {
-    ntropy.scaffold('controller',name+'-list');
-    ntropy.scaffold('controller',name+'-detail');
-    ntropy.scaffold('controller',name+'-edit');
-    ntropy.scaffold('view',name+'-list');
-    ntropy.scaffold('view',name+'-detail');
-    ntropy.scaffold('view',name+'-edit');
-    ntropy.scaffold('resource',name);
+    ng2.scaffold('controller',name+'-list');
+    ng2.scaffold('controller',name+'-detail');
+    ng2.scaffold('controller',name+'-edit');
+    ng2.scaffold('view',name+'-list');
+    ng2.scaffold('view',name+'-detail');
+    ng2.scaffold('view',name+'-edit');
+    ng2.scaffold('resource',name);
   });
 
 cli
   .command('build')
   .description('\t\tbuild the project'.grey)
   .action(function () {
-    ntropy.build();
+    ng2.build();
   })
 
 cli.parse(process.argv);

@@ -1,16 +1,16 @@
-# ntropy
+# ng2
 > the beginning of a modular angular.js app generator
 
 ### installation
 
-it can be installed with npm: `npm --global install ntropy`
+it can be installed with npm: `npm --global install ng2`
 
 ### usage
 
 ```
-○ ntropy --help
+○ ng2 --help
 
-  Usage: ntropy [options] [command]
+  Usage: ng2 [options] [command]
 
   Commands:
 

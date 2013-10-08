@@ -19,20 +19,20 @@ module.exports = {
    */
   bootstrap: function () {
     if(!this.reporter) {
-      throw 'ntropy needs a reporter';
+      throw 'ng2 needs a reporter';
     }
 
     this.reporter.broadcast('info',"bootstrapping");
 
     if(this.config.root) {
-      this.reporter.broadcast('error', 'ntropy has already been bootstrapped');
+      this.reporter.broadcast('error', 'ng2 has already been bootstrapped');
       this.reporter.broadcast('error', 'nirvana is near');
       return;
     }
 
     // where we're calling this from
     this.config.root = process.cwd();
-    this.reporter.broadcast('info', 'ntropy summoned at '+this.config.root);
+    this.reporter.broadcast('info', 'ng2 summoned at '+this.config.root);
 
     // figure out if we're inside a module
     var component = path.join(this.config.root,'component.json');
@@ -48,7 +48,7 @@ module.exports = {
   /**
    * @name module
    * @description
-   * Scaffold a module using ntropy-template
+   * Scaffold a module using ng2-template
    * @param  {Object} opts some options you can pass
    */
   module: function (name) {
@@ -100,7 +100,7 @@ module.exports = {
 
     this.reporter.broadcast('log', 'module scaffolded at '+moduleDir);
     this.reporter.broadcast('log', 'cd into it and use any of the other generators freely');
-    this.reporter.broadcast('log', 'check `ntropy --help` for help on the generators');
+    this.reporter.broadcast('log', 'check `ng2 --help` for help on the generators');
   },
 
   /**
@@ -377,7 +377,7 @@ module.exports = {
     this.reporter.broadcast('info', 'crafted index.html at '+folder+'/index.html');
 
     var readme = ['# '+name+'\n',
-      '> ntropy zero app',
+      '> ng2 zero app',
       '',
       '### Install components using `component`',
       '',

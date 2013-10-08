@@ -1,23 +1,23 @@
 {
-  "name": "ntropy",
-  "version": "0.1.5",
+  "name": "ng2",
+  "version": "0.1.6",
   "description": "AngularJS Modular App Generator",
   "main": "index",
   "repository": {
     "type": "git",
-    "url": "git://github.com/leostera/ntropy.git"
+    "url": "git://github.com/leostera/ng2.git"
   },
   "keywords": [
     "angularjs",
     "modular",
     "app",
     "generator",
-    "ntropy"
+    "ng2"
   ],
   "author": "Leandro Ostera <me@leostera.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/leostera/ntropy/issues"
+    "url": "https://github.com/ng2/ng2/issues"
   },
   "dependencies": {
     "commander": "~2.0.0",
@@ -30,6 +30,6 @@
     "less": "~1.4.2"
   },
   "bin": {
-    "ntropy": "./bin/ntropy"
+    "ng2": "./bin/ng2"
   }
 }
