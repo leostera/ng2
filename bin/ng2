@@ -13,7 +13,7 @@ anchorman.on('log', function  (data) {
   if(typeof data === 'object') {
     data = JSON.stringify(data, null,4);
   }
-  console.log('log: '.blue, data.grey);
+  console.log('log: '.cyan, data.grey);
 });
 
 anchorman.on('error', function  (data) {
@@ -129,6 +129,13 @@ cli
   .description('\t\tbuild the project'.grey)
   .action(function () {
     ng2.build();
-  })
+  });
+
+cli
+  .command('watch')
+  .description('\t\tcontinuous watch and build'.grey)
+  .action(function () {
+    ng2.watch();
+  });
 
 cli.parse(process.argv);

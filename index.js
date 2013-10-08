@@ -2,10 +2,12 @@ var fs    = require('fs')
   , path  = require('path')
   , _     = require('lodash')
   , _s    = require('underscore.string')
-  , utils = require('./utils');
+  , utils = require('./utils')
+  , chokidar = require('chokidar');
 
 module.exports = {
   reporter: false,
+  building: false,
 
   config: {
     root: '',
@@ -166,7 +168,7 @@ module.exports = {
    * Perform a build of all the local modules and component converting all
    * the local templates from html to js.
    */
-  build: function () {
+  build: function (target) {
     if(this.config.module) {
       this.reporter.broadcast('error', 'trying to build from inside a module? don\'t');
     }
@@ -174,6 +176,15 @@ module.exports = {
     if(/modules$/.test(this.config.root)) {
       this.reporter.broadcast('error', 'trying to build from the modules folder? don\'t');
     }
+
+    if(this.building) {
+      this.reporter.broadcast('info', 'aborting a build while still building');
+      return;
+    }
+
+    target = target || 'dev';
+
+    this.building = true;
 
     if(!fs.existsSync(path.join(this.config.root,'build'))) {
       fs.mkdirSync(path.join(this.config.root,'build'));
@@ -202,7 +213,7 @@ module.exports = {
           // only views
           if (!/views/ig.test(file)) return;
 
-          this.reporter.broadcast('log', 'processing '+file);
+          this.reporter.broadcast('log', '- processing '+file);
 
           var ext = path.extname(file);
           var originalFile = file;
@@ -276,6 +287,10 @@ module.exports = {
       }.bind(this));
     }.bind(this);
 
+    var minify = function (builder) {
+      
+    }.bind(this);
+
     var start = new Date;
 
     var component = utils.readFileToObject(path.join(this.config.root,'component.json'));
@@ -308,6 +323,9 @@ module.exports = {
 
     builder.use(convertTemplate);
     builder.use(compileLess);
+    if(target === 'prod') {
+      builder.use(minify);
+    }
 
     component.paths.forEach(function (p) {
       builder.addLookup(path.join(this.config.root,p));
@@ -323,6 +341,7 @@ module.exports = {
     var duration = new Date - start;
     var time = '– '+duration+'ms';
     this.reporter.broadcast('log', 'build completed '+time)
+    this.building = false;
   },
 
   /**
@@ -384,7 +403,7 @@ module.exports = {
       '## Now what?',
       'For help with ng2 run `ng2 help`',
       '## Building',
-      'Just do `ng2 build`'
+      'Just do `ng2 build`',
       '### This readme is a WIP!'].join(' \n');
 
     fs.writeFileSync(path.join(folder,'README.md'), readme)
@@ -393,5 +412,36 @@ module.exports = {
     this.reporter.broadcast('log','scaffolded application at '+folder);
     this.reporter.broadcast('log','cd into '+name);
     this.reporter.broadcast('log','run `component install` to set everything up');
-  }
+  },
+
+  /**
+   * @name watch
+   * @description
+   * Watch for file changes and rebuild the app.
+   */
+  watch: function (target) {
+    var modulesDir = path.join(this.config.root,'modules');
+    var watcher = chokidar.watch(modulesDir, {ignored: /^\./, persistent: true});
+
+    this.reporter.broadcast('info', 'Watching '+path.join(this.config.root,'modules'));
+
+    watcher
+      .on('error', function(error) {
+        this.reporter.broadcast('error', 'Error happened ' + error);
+      }.bind(this))
+
+    watcher.on('change', function(path, stats) {
+      watcher.close();
+      this.reporter.broadcast('log', 'File changed '+path);
+      this.build(target);
+      this.reporter.broadcast('log', '');
+      watcher.add(modulesDir);
+    }.bind(this));
+  },
+
+  /**
+   * @name server
+   * @description
+   * 
+   */
 }
