@@ -1,6 +1,7 @@
 # ng2
 > the beginning of a modular angular.js app generator
-#### Disclaimer: this is an early-stage project that needs your collaboration! Try it out, file an issue, shape it! :)
+
+#### Disclaimer: this is an early-stage project that needs your collaboration! :)
 
 ### Installation
 
