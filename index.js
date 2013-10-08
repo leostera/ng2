@@ -364,11 +364,14 @@ module.exports = {
         this.reporter.broadcast('error','app root at '+folder+' not empty!');
       }
     }
+    this.reporter.broadcast('log', 'starting app...');
     if(!fs.existsSync(path.join(folder, 'modules'))) {
       fs.mkdirSync(path.join(folder,'modules'));
       this.reporter.broadcast('info','created modules folder at '+folder+'/modules');
 
       var exec = require('exec-sync');
+      this.reporter.broadcast('log', 'installing ng2 core module...');
+      this.reporter.broadcast('info','cloning ng2/core module into '+folder+'/modules/ng2-core');
       exec('git clone --depth 1 https://github.com/ng2/core.git '+folder+'/modules/ng2-core');
     } else {
       this.reporter.broadcast('info','using modules folder at '+folder+'/modules');
