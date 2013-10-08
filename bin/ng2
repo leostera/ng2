@@ -39,6 +39,7 @@ ng2.bootstrap();
 cli
   .version(version)
   .option('-v, --verbose', 'verbose mode')
+  .option('-p, --port', 'the server port');
 
 cli
   .command('start <name>')
@@ -137,5 +138,12 @@ cli
   .action(function () {
     ng2.watch();
   });
+
+cli
+  .command('server')
+  .description('\t\trun a local webserver'.grey)
+  .action(function () {
+    ng2.server(cli.port)
+  })
 
 cli.parse(process.argv);

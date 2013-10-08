@@ -3,7 +3,8 @@ var fs    = require('fs')
   , _     = require('lodash')
   , _s    = require('underscore.string')
   , utils = require('./utils')
-  , chokidar = require('chokidar');
+  , chokidar = require('chokidar')
+  , connect = require('connect');
 
 module.exports = {
   reporter: false,
@@ -168,7 +169,7 @@ module.exports = {
    * Perform a build of all the local modules and component converting all
    * the local templates from html to js.
    */
-  build: function (target) {
+  build: function () {
     if(this.config.module) {
       this.reporter.broadcast('error', 'trying to build from inside a module? don\'t');
     }
@@ -181,8 +182,6 @@ module.exports = {
       this.reporter.broadcast('info', 'aborting a build while still building');
       return;
     }
-
-    target = target || 'dev';
 
     this.building = true;
 
@@ -213,7 +212,7 @@ module.exports = {
           // only views
           if (!/views/ig.test(file)) return;
 
-          this.reporter.broadcast('log', '- processing '+file);
+          var start = new Date;
 
           var ext = path.extname(file);
           var originalFile = file;
@@ -232,6 +231,9 @@ module.exports = {
           pkg.addFile('scripts', originalFile.replace(/.html$/ig,'.js'));
           pkg.removeFile('scripts', file);
 
+          var duration = new Date - start;
+          var time = ' – '+duration+'ms';
+          this.reporter.broadcast('log', ' - processed '+originalFile+time);
           this.reporter.broadcast('info', "Converted "+file)
           this.reporter.broadcast('info', "to "+newFile+" as:");
           this.reporter.broadcast('info', fn);
@@ -260,9 +262,10 @@ module.exports = {
           // only styles
           if (!/styles/ig.test(file)) return;
 
-          this.reporter.broadcast('log', 'processing '+file);
+          var start = new Date;
 
           var ext = path.extname(file);
+          var originalFile = file;
           var file = pkg.path(file);
           if(ext === '.css') {
             file = file.replace(/.css$/ig, '.less');
@@ -276,6 +279,9 @@ module.exports = {
             if(e) this.reporter.broadcast('error', e);
             fs.writeFileSync(newFile, css);
 
+            var duration = new Date - start;
+            var time = ' – '+duration+'ms';
+            this.reporter.broadcast('log', ' - processed '+originalFile+time);
             this.reporter.broadcast('info', "Converted "+file)
             this.reporter.broadcast('info', "to "+newFile+" as:");
             this.reporter.broadcast('info', css);
@@ -285,10 +291,6 @@ module.exports = {
 
         fn();
       }.bind(this));
-    }.bind(this);
-
-    var minify = function (builder) {
-      
     }.bind(this);
 
     var start = new Date;
@@ -323,9 +325,6 @@ module.exports = {
 
     builder.use(convertTemplate);
     builder.use(compileLess);
-    if(target === 'prod') {
-      builder.use(minify);
-    }
 
     component.paths.forEach(function (p) {
       builder.addLookup(path.join(this.config.root,p));
@@ -368,6 +367,9 @@ module.exports = {
     if(!fs.existsSync(path.join(folder, 'modules'))) {
       fs.mkdirSync(path.join(folder,'modules'));
       this.reporter.broadcast('info','created modules folder at '+folder+'/modules');
+
+      var exec = require('exec-sync');
+      exec('git clone --depth https://github.com/ng2/core.git modules/ng2-core');
     } else {
       this.reporter.broadcast('info','using modules folder at '+folder+'/modules');
     }
@@ -377,11 +379,10 @@ module.exports = {
 
     var component = {
       dependencies: {
-        "leostera/angular.js": "*",
-        "ng2/ng2-core": "*"
+        "leostera/angular.js": "*"
       },
       remotes: [],
-      local: [],
+      local: ["ng2-core"],
       paths: ["./components", "./modules"]
     };
 
@@ -419,11 +420,14 @@ module.exports = {
    * @description
    * Watch for file changes and rebuild the app.
    */
-  watch: function (target) {
+  watch: function () {
+    this.reporter.broadcast('log', 'Watching ./modules/**/*');
+    this.reporter.broadcast('log', 'Ignoring paths starting with a dot');
+
     var modulesDir = path.join(this.config.root,'modules');
     var watcher = chokidar.watch(modulesDir, {ignored: /^\./, persistent: true});
 
-    this.reporter.broadcast('info', 'Watching '+path.join(this.config.root,'modules'));
+    this.reporter.broadcast('info', 'Actually watching '+path.join(this.config.root,'modules'));
 
     watcher
       .on('error', function(error) {
@@ -433,7 +437,7 @@ module.exports = {
     watcher.on('change', function(path, stats) {
       watcher.close();
       this.reporter.broadcast('log', 'File changed '+path);
-      this.build(target);
+      this.build();
       this.reporter.broadcast('log', '');
       watcher.add(modulesDir);
     }.bind(this));
@@ -442,6 +446,28 @@ module.exports = {
   /**
    * @name server
    * @description
-   * 
+   * Runs a development webserver while watching the files
    */
+  server: function (port) {
+    this.watch();
+    connect()
+      .use(connect.logger('dev'))
+      .use(function (req, res, next) {
+        this.reporter.broadcast('log', req.originalUrl);
+        if(/^\/node_modules/.test(req.originalUrl) ||
+          /^\/modules/.test(req.originalUrl) ||
+          /^\/components/.test(req.originalUrl)) {
+          res.writeHead(200);
+          fs.createReadStream(path.join(this.config.root,'index.html')).pipe(res);
+        } else {
+          next();
+        }
+      }.bind(this))
+      .use(connect.static(this.config.root))
+      .use(function (req, res, next) {
+        res.writeHead(200);
+        fs.createReadStream(path.join(this.config.root,'index.html')).pipe(res);
+      }.bind(this))
+      .listen(port || 9000);
+  }
 }
