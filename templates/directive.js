@@ -4,7 +4,7 @@
  * @description
  * ...
  */
-angular('${_s.camelize(module)}')
+angular.module('${_s.camelize(module)}')
   .directives('${_s.camelize(name)}',['$scope', function ($scope) {
     'use strict';
     

@@ -5,7 +5,7 @@
  * 
  * Filters a collection with a simple regex.
  */
-angular('${_s.camelize(module)}')
+angular.module('${_s.camelize(module)}')
   .filter('${_s.camelize(name)}',['$scope'
   , function ($scope) {
     return function(str, letter, prop){
