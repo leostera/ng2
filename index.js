@@ -449,6 +449,7 @@ module.exports = {
    * Runs a development webserver while watching the files
    */
   server: function (port) {
+    this.build();
     this.watch();
     connect()
       .use(connect.logger('dev'))
