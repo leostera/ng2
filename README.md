@@ -1,12 +1,12 @@
 # ng2
 > the beginning of a modular angular.js app generator
-> disclaimer: this is an alpha project under heavy development
+#### Disclaimer: this is an early-stage project that needs your collaboration! Try it out, file an issue, shape it! :)
 
-### installation
+### Installation
 
 it can be installed with npm: `npm --global install ng2`
 
-### usage
+### Usage
 
 ```
 ○ ng2 --help
@@ -39,7 +39,7 @@ it can be installed with npm: `npm --global install ng2`
 
 ```
 
-### let's get started
+### Let's get started!
 
 0. make sure you have `component` installed globally: `npm -g i component` (you might need to use `sudo` for this)
 1. install `ng2` with `npm` globally: `npm -g i ng2` (you might need to use `sudo` for this too)
