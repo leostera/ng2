@@ -38,4 +38,11 @@ it can be installed with npm: `npm --global install ng2`
 
 ```
 
-Craft a module, cd into it, scaffold some resources. Throw in a few component dependencies. Go back to the root of your project and do a build.
+### let's get started
+
+0. make sure you have `component` installed globally: `npm -g i component` (you might need to use `sudo` for this)
+1. install `ng2` with `npm` globally: `npm -g i ng2` (you might need to use `sudo` for this too)
+2. start a barebones app using `ng2 start <appName>` (appName can be `.` to scaffold within the current folder)
+3. `cd <appName>`
+4. `component install`
+5. `ng2 server` and open `localhost:9000` to see your modular angular app working.
