@@ -49,4 +49,4 @@ Make sure you have `ng2` already installed.
 3. `component install`
 4. `ng2 server`
 
-Your modular angular app will be running on `localhost:9000`.
+Your modular angular app will be watched, built upon changes and always running at `localhost:9000`.
