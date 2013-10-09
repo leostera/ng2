@@ -4,5 +4,8 @@ angular.module('static')
     .when('/', {
       controller: 'home',
       template: require('./views/home')
+    })
+    .otherwise({
+      redirectTo: '/'
     });
 }]);
