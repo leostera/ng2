@@ -1,0 +1,24 @@
+html,
+body {
+  width: 100%;
+  overflow-x: hidden;
+}
+/**
+ * Main styles
+ */
+body {
+  font-family: "Bariol_Thin";
+  font-size: 2em;
+  color: #81d6dc;
+  background: #fdfdfe;
+}
+body a {
+  text-decoration: none;
+}
+body > section {
+  margin: 0 auto;
+  display: block;
+  width: 70%;
+  max-width: 1080px;
+  padding: 10px 50px;
+}

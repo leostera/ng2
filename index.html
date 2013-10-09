@@ -1,0 +1,31 @@
+<html ng-app="ng2.github.io">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0" />
+  <title>Welcome to ng2.github.io</title>
+  <link rel="stylesheet" href="build/build.css">
+</head>
+<body>
+  <navbar></navbar>
+
+  <section ng-view></section>
+  <script src="build/build.js"></script>
+  <script>
+  window.angular = require('leostera-angular.js');
+  require('leostera-angular.js/build/angular-route.js');
+  require('leostera-angular.js/build/angular-animate.js');
+  require('leostera-angular.js/build/angular-resource.js');
+  require('leostera-angular.js/build/angular-cookies.js');
+  require('leostera-angular.js/build/angular-sanitize.js');
+  
+  // Add other requires here
+  
+  bootstrap = require('core');
+  require('static');
+
+  var app = bootstrap("ng2.github.io", [
+    'static'
+    ]);
+  </script>
+</body>
+</html>

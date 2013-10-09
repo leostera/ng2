@@ -1,0 +1,58 @@
+@cyan: #81D6DC;
+@white: #FDFDFE;
+@black: #020201;
+
+nav {
+  margin: 0;
+  padding: 0;
+  padding-top: 20px;
+
+  color: @white;
+  background-color: @cyan;
+
+  background: @cyan url('/images/logo.png') no-repeat center;
+  background-size: 210px;
+  height: 210px;
+
+  text-align: center;
+
+  font-family: 'Bariol_Light';
+
+  ul {
+    margin: 160px 0px 20px 45px;
+    padding: 0;
+
+    list-style: none;
+
+    li {
+      margin: 10px;
+      
+      float: left;
+
+      color: @black;
+      font-size: 1em;
+        
+      -webkit-filter: invert(100%);
+      
+      a {
+        height: 32px;
+
+        padding-left: 40px;
+        padding-top: 2px;
+        
+        background: url(/images/octocat.png) no-repeat;
+        background-size: 32px 32px;
+
+        color: @black;
+      }
+
+      a:active {
+        color: @black;
+      }
+
+      a:visited {
+        color: @black;
+      }
+    }
+  }
+}

@@ -1,0 +1,39 @@
+body > section > h3,
+body > section > h6 {
+  text-align: center;
+}
+body section a {
+  color: #fdfdfe;
+  padding: 5px;
+  background-color: #81d6dc;
+}
+span.heart:before {
+  content: '<3';
+  font-family: 'Courier New';
+  font-weight: 100;
+  color: red;
+}
+pre {
+  background: #81d6dc;
+  color: #fdfdfe;
+  font-weight: 100;
+  font-family: "Courier New";
+  width: 100%;
+  display: block;
+  padding: 20px;
+}
+pre.small {
+  font-size: 0.8em;
+}
+pre span.comment {
+  font-style: italic;
+  color: #ddffdd;
+}
+@media only screen and (min-device-width: 320px) and (max-device-width: 568px) and (orientation: portrait) {
+  pre {
+    margin: 0;
+    margin-left: -50px;
+    display: block;
+    width: 125%;
+  }
+}

@@ -1,0 +1,26 @@
+/**
+ * Fonts
+ */
+@font-face {
+  font-family: "Bariol_Thin";
+  src: url('/fonts/Bariol_Thin.otf') format('opentype');
+}
+@font-face {
+  font-family: "Bariol_Light";
+  src: url('/fonts/Bariol_Light.otf') format('opentype');
+}
+@font-face {
+  font-family: "Bariol_Bold";
+  src: url('/fonts/Bariol_Bold.otf') format('opentype');
+}
+* {
+  font-family: "Bariol_Light";
+}
+b {
+  font-family: "Bariol_Bold";
+}
+h1,
+h2,
+h3 {
+  font-family: "Bariol_Light";
+}

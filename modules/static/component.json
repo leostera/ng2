@@ -1,0 +1,26 @@
+{
+  "name": "static",
+  "repo": "ng2/static",
+  "description": "",
+  "version": "0.0.1",
+  "keywords": [],
+  "dependencies": {},
+  "development": {},
+  "license": "MIT",
+  "main": "index.js",
+  "scripts": [
+    "index.js",
+    "routes.js",
+    "controllers/home.js",
+    "views/home.js",
+    "directives/navbar.js",
+    "views/navbar.js"
+  ],
+  "styles": [
+    "styles/home.css",
+    "styles/navbar.css",
+    "styles/colors.css",
+    "styles/fonts.css",
+    "styles/main.css"
+  ]
+}

@@ -1,0 +1,1 @@
+module.exports = '<nav>\n  <ul>\n    <li>\n      <a href="https://github.com/ng2/ng2">ng2 on GitHub</a>\n    </li>\n  </ul>\n</nav>';

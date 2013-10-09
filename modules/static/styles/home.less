@@ -1,0 +1,53 @@
+@cyan: #81D6DC;
+@white: #FDFDFE;
+@gray: #ddffdd;
+@black: #020201;
+
+body > section > h3, body > section > h6 {
+  text-align: center;
+}
+
+body section a {
+  color: @white;
+  padding: 5px;
+  background-color: @cyan;
+}
+
+span.heart:before {
+  content: '<3';
+  font-family: 'Courier New';
+  font-weight: 100;
+  color: red;
+}
+
+pre {
+  background: #81d6dc;
+  color: #fdfdfe;
+  font-weight: 100;
+  font-family: "Courier New";
+  width: 100%;
+  display: block;
+  padding: 20px;
+
+  &.small {
+    font-size: 0.8em;
+  }
+
+  span.comment {
+    font-style: italic;
+    color: @gray;
+  }
+}
+
+
+@media only screen 
+and (min-device-width : 320px) 
+and (max-device-width : 568px) 
+and (orientation : portrait) {
+  pre {
+    margin: 0;
+    margin-left: -50px;
+    display: block;
+    width: 125%;
+  }
+}
