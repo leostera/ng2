@@ -458,9 +458,7 @@ module.exports = {
       .use(connect.logger('dev'))
       .use(function (req, res, next) {
         this.reporter.broadcast('log', req.originalUrl);
-        if(/^\/node_modules/.test(req.originalUrl) ||
-          /^\/modules/.test(req.originalUrl) ||
-          /^\/components/.test(req.originalUrl)) {
+        if(!fs.existsSync(path.join(this.config.root,req.originalUrl))) {
           res.writeHead(200);
           fs.createReadStream(path.join(this.config.root,'index.html')).pipe(res);
         } else {
