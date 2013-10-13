@@ -222,22 +222,27 @@ module.exports = {
             file = file.replace(/.js$/ig, '.html');
           }
 
-          // read the file
-          var str = fs.readFileSync(file, 'utf8');
-          var fn = str2js(str);
-          newFile = file.replace(/.html$/ig,'.js');
+          // if the .html file exists
+          if(fs.existsSync(file)) {
+            // read the file
+            var str = fs.readFileSync(file, 'utf8');
+            var fn = str2js(str);
+            newFile = file.replace(/.html$/ig,'.js');
 
-          fs.writeFileSync(newFile, fn);
-          pkg.addFile('scripts', originalFile.replace(/.html$/ig,'.js'));
-          pkg.removeFile('scripts', file);
-
-          var duration = new Date - start;
-          var time = ' – '+duration+'ms';
-          this.reporter.broadcast('log', ' - processed '+originalFile+time);
-          this.reporter.broadcast('info', "Converted "+file)
-          this.reporter.broadcast('info', "to "+newFile+" as:");
-          this.reporter.broadcast('info', fn);
-
+            fs.writeFileSync(newFile, fn);
+            pkg.addFile('scripts', originalFile.replace(/.html$/ig,'.js'));
+            pkg.removeFile('scripts', file);
+            var duration = new Date - start;
+            var time = ' – '+duration+'ms';
+            this.reporter.broadcast('log', ' - processed '+originalFile+time);
+            this.reporter.broadcast('info', "Converted "+file)
+            this.reporter.broadcast('info', "to "+newFile+" as:");
+            this.reporter.broadcast('info', fn);
+          } else if(! fs.existsSync(pkg.path(originalFile)) ) {
+            this.reporter.broadcast('error', 'Couldn\t find '+pkg.path(originalFile));
+          } else {
+            this.reporter.broadcast('info', 'Skipping file '+originalFile);
+          }
         }.bind(this));
 
         fn();
@@ -271,21 +276,27 @@ module.exports = {
             file = file.replace(/.css$/ig, '.less');
           }
 
-          // read the file
-          var str = fs.readFileSync(file, 'utf8');
-          newFile = file.replace(/.less$/ig,'.css');
+          if(fs.existsSync(file)) {
+            // read the file
+            var str = fs.readFileSync(file, 'utf8');
+            newFile = file.replace(/.less$/ig,'.css');
 
-          less.render(str, function (e, css) {
-            if(e) this.reporter.broadcast('error', e);
-            fs.writeFileSync(newFile, css);
+            less.render(str, function (e, css) {
+              if(e) this.reporter.broadcast('error', e);
+              fs.writeFileSync(newFile, css);
 
-            var duration = new Date - start;
-            var time = ' – '+duration+'ms';
-            this.reporter.broadcast('log', ' - processed '+originalFile+time);
-            this.reporter.broadcast('info', "Converted "+file)
-            this.reporter.broadcast('info', "to "+newFile+" as:");
-            this.reporter.broadcast('info', css);
-          }.bind(this));
+              var duration = new Date - start;
+              var time = ' – '+duration+'ms';
+              this.reporter.broadcast('log', ' - processed '+originalFile+time);
+              this.reporter.broadcast('info', "Converted "+file)
+              this.reporter.broadcast('info', "to "+newFile+" as:");
+              this.reporter.broadcast('info', css);
+            }.bind(this));
+          } else if(! fs.existsSync(pkg.path(originalFile)) ) {
+            this.reporter.broadcast('error', 'Couldn\t find '+pkg.path(originalFile));
+          } else {
+            this.reporter.broadcast('info', 'Skipping file '+originalFile);
+          }
 
         }.bind(this));
 
