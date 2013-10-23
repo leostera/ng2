@@ -65,7 +65,13 @@ module.exports = {
    */
   module: function (name) {
     if(this.config.module) {
-      this.reporter.broadcast('error', 'trying to create a module inside a module? don\'t');
+      this.reporter.broadcast('info', 'creating a module from inside a module');
+      this.config.root = resolveToRoot(this.config.root);
+    }
+
+    if(/modules$/.test(this.config.root)) {
+      this.reporter.broadcast('info', 'creating a module from the modules folder');
+      this.config.root = resolveToRoot(this.config.root);
     }
 
     if(!/^(\w+)[-\/]{1}(\w+)$/ig.test(name)) {
@@ -76,12 +82,7 @@ module.exports = {
     name = name.replace(/[ \/-]/ig,'/').split('/').splice(1);
     name = name.join('-');
 
-    var moduleDir;
-    if(/\/modules$/.test(this.config.root)) {
-      moduleDir = path.join(this.config.root, name);
-    } else {
-      moduleDir = path.join(this.config.root, 'modules', name);
-    }
+    var moduleDir = path.join(this.config.root, 'modules', name);
 
     if(fs.existsSync(moduleDir)) {
       this.reporter.broadcast('info', 'there\'s a module with that name already');
