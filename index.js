@@ -54,6 +54,10 @@ module.exports = {
       this.reporter.broadcast('info', 'we are in a module named "'+this.config.module.name.bold+'"');
     } else if (fs.existsSync(component) && fs.existsSync(modulesDir)) {
       this.reporter.broadcast('info', 'we should be at the app root');
+    } else if(!fs.existsSync(component) && /modules$/.test(this.config.root)) {
+      this.reporter.broadcast('info', 'we are at the modules folder');
+    } else if(!fs.existsSync(component)) {
+      this.reporter.broadcast('error', 'There really should be a component.json file for this command to work.');
     }
   },
 
