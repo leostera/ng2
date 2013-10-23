@@ -440,6 +440,7 @@ module.exports = {
 
     var modulesDir = path.join(this.config.root,'modules');
     var watcher = chokidar.watch(modulesDir, {ignored: /^\./, persistent: true});
+    watcher.add(path.join(this.config.root,'components'), {ignored: /^\./, persistent: true});
 
     this.reporter.broadcast('info', 'Actually watching '+path.join(this.config.root,'modules'));
 
