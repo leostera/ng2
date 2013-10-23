@@ -6,6 +6,15 @@ var fs    = require('fs')
   , chokidar = require('chokidar')
   , connect = require('connect');
 
+var resolveToRoot = function (folder) {
+  if(fs.existsSync(path.join(folder, 'modules'))
+    && fs.existsSync(path.join(folder, 'components'))
+    && fs.existsSync(path.join(folder, 'component.json'))) {
+    return folder;
+  }
+  return resolveToRoot(path.join(folder, '..'));
+}
+
 module.exports = {
   reporter: false,
   building: false,
@@ -179,11 +188,13 @@ module.exports = {
    */
   build: function () {
     if(this.config.module) {
-      this.reporter.broadcast('error', 'trying to build from inside a module? don\'t');
+      this.reporter.broadcast('info', 'building from inside a module');
+      this.config.root = resolveToRoot(this.config.root);
     }
 
     if(/modules$/.test(this.config.root)) {
-      this.reporter.broadcast('error', 'trying to build from the modules folder? don\'t');
+      this.reporter.broadcast('info', 'building from the modules folder');
+      this.config.root = resolveToRoot(this.config.root);
     }
 
     if(this.building) {
@@ -446,14 +457,27 @@ module.exports = {
    * Watch for file changes and rebuild the app.
    */
   watch: function () {
+    if(this.config.module) {
+      this.reporter.broadcast('info', 'building from inside a module');
+      this.config.root = resolveToRoot(this.config.root);
+    }
+
+    if(/modules$/.test(this.config.root)) {
+      this.reporter.broadcast('info', 'building from the modules folder');
+      this.config.root = resolveToRoot(this.config.root);
+    }
+
     this.reporter.broadcast('log', 'Watching ./modules/**/*');
     this.reporter.broadcast('log', 'Ignoring paths starting with a dot');
 
-    var modulesDir = path.join(this.config.root,'modules');
-    var watcher = chokidar.watch(modulesDir, {ignored: /^\./, persistent: true});
-    watcher.add(path.join(this.config.root,'components'), {ignored: /^\./, persistent: true});
+    var modulesDir = path.join(this.config.root,'modules')
+      , componentsDir = path.join(this.config.root,'components');
 
-    this.reporter.broadcast('info', 'Actually watching '+path.join(this.config.root,'modules'));
+    var watcher = chokidar.watch(modulesDir, {ignored: /^\./, persistent: true});
+    watcher.add(componentsDir, {ignored: /^\./, persistent: true});
+
+    this.reporter.broadcast('info', 'Actually watching '+modulesDir);
+    this.reporter.broadcast('info', 'and watching '+componentsDir);
 
     watcher
       .on('error', function(error) {
