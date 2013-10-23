@@ -118,10 +118,13 @@ module.exports = {
       this.reporter.broadcast('error', 'trying to scaffold outside a module? don\'t');
     }
 
-    var typeDir = path.join(this.config.root, template+'s');
-    if(!fs.existsSync(typeDir)) {
-      fs.mkdirSync(typeDir);
-      this.reporter.broadcast('info', 'created folder '+template.bold+' at '+typeDir);
+    var typeDir =  this.config.root;
+    if(template!=='script') {
+      typeDir = path.join(typeDir, template+'s');
+      if(!fs.existsSync(typeDir)) {
+        fs.mkdirSync(typeDir);
+        this.reporter.broadcast('info', 'created folder '+template.bold+' at '+typeDir);
+      }
     }
 
     var ext = template === 'view'
@@ -129,6 +132,9 @@ module.exports = {
       : template === 'style'
         ? '.less'
         : '.js';
+
+
+    name = name.replace(new RegExp(ext,'ig'),'');
 
     var filePath = path.join(typeDir, _s.dasherize(name));
     filePath += ext;
@@ -152,6 +158,8 @@ module.exports = {
             file = file.replace(/.html$/ig, '.js');
           } else if (template === 'style') {
             file = file.replace(/.less$/ig, '.css');
+          } else if (template === 'script') {
+            return path.join(file);
           }
           return path.join( template+'s', file );
         })
@@ -393,7 +401,8 @@ module.exports = {
 
     var component = {
       dependencies: {
-        "leostera/angular.js": "*"
+        "componentizr/angular": "*",
+        "componentizr/angular-route": "*"
       },
       remotes: [],
       local: ["ng2-core"],
@@ -419,6 +428,8 @@ module.exports = {
       'For help with ng2 run `ng2 help`',
       '## Building',
       'Just do `ng2 build`',
+      '## But I want a server!',
+      'Just do `ng2 server` then',
       '### This readme is a WIP!'].join(' \n');
 
     fs.writeFileSync(path.join(folder,'README.md'), readme)

@@ -113,6 +113,13 @@ cli
   });
 
 cli
+  .command('script <name>')
+  .description('\t\tscaffold a script'.grey)
+  .action(function (name) {
+    ng2.scaffold('script',name);
+  });
+
+cli
   .command('resource <name>')
   .description('\t\tscaffold a full resource'.grey)
   .action(function (name) {
