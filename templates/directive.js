@@ -5,9 +5,9 @@
  * ...
  */
 angular.module('${_s.camelize(module)}')
-  .directives('${_s.camelize(name)}',['$scope', function ($scope) {
+  .directive('${_s.camelize(name)}',['$scope', function ($scope) {
     'use strict';
-    
+
     return {
       priority: 0,
       restrict: 'A',
@@ -38,6 +38,6 @@ angular.module('${_s.camelize(module)}')
         ngModel.$parsers.push(fromField);
         ngModel.$formatters.push(toField);
       }
-    };  
-  };
-}]);
+    };
+  }
+]);
