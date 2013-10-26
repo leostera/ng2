@@ -1,8 +1,12 @@
 # ng2
 > the beginning of a modular angular.js app generator
 
-#### Disclaimer: this is an early-stage project that needs your collaboration! :)
+## Disclaimer: this is just a proof of concept.
+> An early-stage project.
+I'm working on a revamp that I'll publish as soon as it's usable.
+Very likely under the same name.
 
+## Shut up and show me how it works
 ### Installation
 
 it can be installed with npm: `npm --global install ng2`
