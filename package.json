@@ -26,8 +26,7 @@
     "commander": "~2.0.0",
     "colors": "~0.6.2",
     "lodash": "~2.0.0",
-    "underscore.string": "~2.3.3",
-    "anchorman": "0.1.1"
+    "underscore.string": "~2.3.3"
   },
   "peerDependencies": {
     "component": "*"
