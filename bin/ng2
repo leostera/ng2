@@ -1,156 +1,80 @@
 #!/usr/bin/env node
 
-var cli     = require('commander')
-  , path    = require('path')
-  , pkg     = require('../package.json')
-  , version = pkg.version
-  , colors  = require('colors')
+var cli = require('commander');
+var path = require('path');
+var pkg = require('../package.json');
+var version = pkg.version;
+var colors = require('colors');
+var join = require('path').join;
+var fs = require('fs');
+var exists = fs.existsSync;
+var mkdir = fs.mkdirSync;
+var write = fs.writeFileSync;
+var utils = require('../lib/utils');
+var utils = utils.dumpObjectToFile;
+var compile = utils.compileTemplate;
 
-var ng2 = require('ng2')
-  , anchorman = require('anchorman');
-
-anchorman.on('log', function  (data) {
-  if(typeof data === 'object') {
-    data = JSON.stringify(data, null,4);
+var folder;
+if(name === '.' || name === './') {
+  name = process.cwd().split('/').pop();
+  folder = process.cwd();
+  info('using current working directory as app name:', name);
+} else {
+  folder = join(process.cwd(),name);
+  info('using current working directory as app root:', folder);
+  if(!exists(folder)) {
+    mkdir(folder);
+    info('created app root at', folder);
+  } else {
+    error('app root at', folder, 'not empty!');
   }
-  console.log('log: '.cyan, data.grey);
-});
+}
 
-anchorman.on('error', function  (data) {
-  if(typeof data === 'object') {
-    data = JSON.stringify(data, null,4);
-  }
-  console.log('error: '.red.bold, data.red);
-  process.exit(-1);
-});
+log('starting app...');
+if(!exists(join(folder, 'modules'))) {
+  mkdir(join(folder, 'modules'));
+  info('created modules folder at', join(folder, 'modules'));
+}
 
-anchorman.on('info', function  (data) {
-  if(typeof data === 'object') {
-    data = JSON.stringify(data, null,4);
-  }
-  if(cli.verbose) {
-    console.log('info: '.magenta, data.grey);
-  }
-});
+write(join(folder,'.gitignore'), 'components\nnode_modules');
+info('crafted git ignore at', join(folder, '.gitignore'));
 
-ng2.reporter = anchorman;
-ng2.bootstrap();
+var component = {
+  dependencies: {
+    "componentizr/angular": "*",
+    "componentizr/angular-route": "*"
+  },
+  remotes: [],
+  local: [],
+  paths: ["./components", "./modules"]
+};
 
-cli
-  .version(version)
-  .option('-v, --verbose', 'verbose mode')
-  .option('-p, --port', 'the server port');
+dump(join(folder,'component.json'), component);
+info('crafted component.json at', join(folder, 'component.json'));
 
-cli
-  .command('start <name>')
-  .description('\t\tscaffold a barebones app'.grey)
-  .action(function (name) {
-    ng2.start(name);
-  });
+var templatePath = join(__dirname, 'templates', 'index.html');
+var object = {
+  app: name
+};
+write(join(folder, 'index.html'), compile(templatePath, object));
+info( 'crafted index.html at ', join(folder, 'index.html'));
 
-cli
-  .command('module <username/name>')
-  .description('\t\tscaffold a module'.grey)
-  .action(function (name) {
-    ng2.module(name);
-  });
+var readme = ['# '+name+'\n',
+  '> ng2 zero app',
+  '',
+  '## Install',
+  'Do `component install` to get all the components you need.',
+  '## Now what?',
+  'For help with ng2 run `ng2 help`',
+  '## Building',
+  'Just do `ng2 build`',
+  '## But I want a server!',
+  'Just do `ng2 server` then',
+  '### This readme is a WIP!'].join(' \n');
 
-cli
-  .command('controller <name>')
-  .description('\t\tscaffold a controller'.grey)
-  .action(function (name) {
-    ng2.scaffold('controller',name);
-    ng2.scaffold('view',name);
-  });
+write(join(folder, 'README.md'), readme)
+info('crafted readme file at', join(folder, 'readme.md'));
 
-cli
-  .command('directive <name>')
-  .description('\t\tscaffold a directive'.grey)
-  .action(function (name) {
-    ng2.scaffold('directive',name);
-  });
-
-cli
-  .command('filter <name>')
-  .description('\t\tscaffold a filter'.grey)
-  .action(function (name) {
-    ng2.scaffold('filter',name);
-  });
-
-cli
-  .command('provider <name>')
-  .description('\t\tscaffold a provider'.grey)
-  .action(function (name) {
-    ng2.scaffold('provider',name);
-  });
-
-cli
-  .command('service <name>')
-  .description('\t\tscaffold a service'.grey)
-  .action(function (name) {
-    ng2.scaffold('service',name);
-  });
-
-cli
-  .command('test <type> <name>')
-  .description('\t\tscaffold a test'.grey)
-  .action(function (type, name) {
-    ng2.scaffold('test-'+type,name);
-  });
-
-cli
-  .command('view <name>')
-  .description('\t\tscaffold a view'.grey)
-  .action(function (name) {
-    ng2.scaffold('view',name);
-  });
-
-cli
-  .command('style <name>')
-  .description('\t\tscaffold a stylesheet'.grey)
-  .action(function (name) {
-    ng2.scaffold('style',name);
-  });
-
-cli
-  .command('script <name>')
-  .description('\t\tscaffold a script'.grey)
-  .action(function (name) {
-    ng2.scaffold('script',name);
-  });
-
-cli
-  .command('resource <name>')
-  .description('\t\tscaffold a full resource'.grey)
-  .action(function (name) {
-    ng2.scaffold('controller',name+'-list');
-    ng2.scaffold('controller',name+'-detail');
-    ng2.scaffold('controller',name+'-edit');
-    ng2.scaffold('view',name+'-list');
-    ng2.scaffold('view',name+'-detail');
-    ng2.scaffold('view',name+'-edit');
-    ng2.scaffold('resource',name);
-  });
-
-cli
-  .command('build')
-  .description('\t\tbuild the project'.grey)
-  .action(function () {
-    ng2.build();
-  });
-
-cli
-  .command('watch')
-  .description('\t\tcontinuous watch and build'.grey)
-  .action(function () {
-    ng2.watch();
-  });
-
-cli
-  .command('server')
-  .description('\t\trun a local webserver'.grey)
-  .action(function () {
-    ng2.server(cli.port)
-  })
-
-cli.parse(process.argv);
+log('scaffolded application at ', folder);
+log('cd into', name);
+log('run `component install` to set everything up');

@@ -1,0 +1,24 @@
+#!/usr/bin/env node
+
+var cli     = require('commander')
+  , path    = require('path')
+  , pkg     = require('../package.json')
+  , version = pkg.version
+  , colors  = require('colors')
+
+var ng2 = require('ng2');
+
+cli
+  .version(version)
+  .option('-v, --verbose', 'verbose mode')
+  .option('-p, --port', 'the server port');
+
+cli
+  .command('controller <name>')
+  .description('\t\tscaffold a controller'.grey)
+  .action(function (name) {
+    ng2.scaffold('controller',name);
+    ng2.scaffold('view',name);
+  });
+
+cli.parse(process.argv);
