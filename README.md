@@ -3,7 +3,7 @@
 
 ### Motivation
 
-I started this project because I wanted something like `rails g` but for Angular. So far this does the job. Everyone is invited to collaborate and make this a tool we can all enjoy using.
+I started this project because I wanted something like `rails g` but for Angular but I didn't want the bloat that most generators out there have. So far this does the job alright in being very lean, extendable and fast enough for my slowest computer not to complain. Everyone is invited to collaborate and make this a tool we can all enjoy using.
 
 ## Installation 
 As a regular node cli tool, you can install this with `npm --global install ng2`.
