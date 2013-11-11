@@ -1,4 +1,4 @@
-#!/usr/bin/env node
+#!/usr/bin/env node --harmony
 
 var cli = require('commander');
 var path = require('path');
@@ -12,6 +12,7 @@ var log = utils.log;
 var error = utils.error;
 var root = process.cwd();
 var bootstrapper = require('../lib/bootstrapper');
+var args = process.argv.splice(2);
 
 // get plugins
 var bins = readdir(__dirname).filter(function (bin) {
