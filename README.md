@@ -16,7 +16,7 @@ it can be installed with npm: `npm --global install ng2`
 
   Commands:
 
-    start <name>                scaffold a barebones app
+    <name>                      scaffold a barebones app
     module <username/name>      scaffold a module
     controller <name>           scaffold a controller
     directive <name>            scaffold a directive
@@ -27,9 +27,6 @@ it can be installed with npm: `npm --global install ng2`
     view <name>                 scaffold a view
     style <name>                scaffold a stylesheet
     resource <name>             scaffold a full resource
-    build                       build the project
-    watch                       continuous watch and build
-    server                      run a local webserver
 
   Options:
 
