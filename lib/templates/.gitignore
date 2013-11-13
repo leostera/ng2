@@ -1,0 +1,4 @@
+components
+build
+modules/*/styles/*.css
+modules/*/views/*.js
