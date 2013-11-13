@@ -1,1 +1,0 @@
-// This is a sample script. Do something with it.
