@@ -26,6 +26,15 @@ if(args[0] === '-v' || args[0] === '--version') {
   process.exit(0);
 }
 
+utils.verbose = false;
+utils.prefix.log = false;
+
+args.forEach(function (a) {
+  if(a === '--verbose') {
+    utils.verbose = true;
+  }
+})
+
 log("It works if it ends with OK");
 
 // setup process end message
