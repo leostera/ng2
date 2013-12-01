@@ -32,16 +32,16 @@ And you already have 3 modules created for you. Scaffolding resources is just as
 ```
 $ ng2 login config
 $ ng2 login routes
-$ ng2 login controller login,logout
-$ ng2 login view login-form,register-form
+$ ng2 login controller login logout
+$ ng2 login view login-form register-form
 
 $ ng2 navbar controller main
 $ ng2 navbar view navbar
 
 $ ng2 comments config
 $ ng2 comments routes
-$ ng2 comments controller list,edit
-$ ng2 comments view list,edit
+$ ng2 comments controller list edit
+$ ng2 comments view list edit
 $ ng2 comments filter search
 $ ng2 comments provider comments
 ```
@@ -104,6 +104,7 @@ in any other component.io project you have and since the repo is public, anyone 
 
 
 ## Usage
+If you find yourself in trouble, running `ng2 --help` is always useful.
 
 ```
 ○ ng2 --help
@@ -142,3 +143,10 @@ log:
 log:  OK
 
 ```
+
+Regularly you would use this as described in the [Getting Started](#getting-started) section.
+
+## Plugins
+The plugin system is very simple, it looks for binaries named `ng2-` and allows you to run them thru `ng2 <name>`. Some examples of this are `ng2-server` –callable as `ng2 server`– or  `ng2-scaffolder`, the default scaffolder.
+
+As you can see, there is also a `ng2-controller` binary. This is because  I want `ng2` to be easily extendable and customizable. Any generator will override the default `scaffolder`. You can still access the `scaffolder` as `ng2 scaffolder <template> [params]`. This way you can specify your very own `ng2 controller` behavior.
