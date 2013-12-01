@@ -44,8 +44,6 @@ cli.parse(process.argv);
 
 if (!cli.args.length) cli.help();
 
-log(cli.args, process.cwd());
-
 cli.args.forEach(function (name) {
   var moduleName = process.cwd().split(path.sep).pop();
   scaffold(moduleName, 'controller', name);
