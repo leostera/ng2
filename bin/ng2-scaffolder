@@ -7,6 +7,7 @@
 var cli = require('commander');
 var path = require('path');
 var pkg = require('../package.json');
+var readdir = require('fs').readdirSync;
 var version = pkg.version;
 var colors = require('colors');
 var utils = require('../lib/utils');
@@ -24,19 +25,31 @@ cli
   .version(version)
 
 cli.help = function(){
-  var logCommand = function (command, description) {
+  var logStruct = function (separator, command, description) {
     var tabs = '  ';
-    log(tabs, '$', command);
-    log(tabs, tabs, description);
-    log();
+    log(tabs, separator, command);
+    description && log(tabs, tabs, description);
   }
   log('Usage:');
-  log('');
-  logCommand('ng2-scaffolder --help', 'Shows this help.');
-  logCommand('ng2-scaffolder --h', 'Also shows this help.');
-  logCommand('ng2-scaffolder <template> <name>', 'Creates a file <name> using <template> as a base');
-  logCommand('ng2-scaffolder controller navbar dropdowns another'
+  log();
+  logStruct('$', 'ng2-scaffolder', 'Shows this help.');
+  log();
+  logStruct('$', 'ng2-scaffolder <template> <name>', 'Creates a file <name> using <template> as a base');
+  log();
+  logStruct('$', 'ng2-scaffolder controller navbar dropdowns another'
     , 'Creates the 3 controllers: navbar, dropdowns, and another');
+  log();
+  log();
+  log('Available templates:');
+  var templates = readdir(path.resolve(__dirname,'../lib/templates'));
+  templates.forEach(function (t) {
+    if(/^\./.test(t) || /component/.test(t)) return;
+    t = t.split('.')
+    t.pop();
+    t = t.join('.');
+    logStruct('*', t);
+  });
+  log();
   process.exit(0);
 };
 
