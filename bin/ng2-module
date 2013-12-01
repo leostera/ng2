@@ -33,8 +33,7 @@ cli.help = function(){
   }
   log('Usage:');
   log('');
-  logCommand('ng2-module --help', 'Shows this help.');
-  logCommand('ng2-module --h', 'Also shows this help.');
+  logCommand('ng2-module', 'Shows this help.');
   logCommand('ng2-module --ownder=john test', 'Creates the john/test module');
   logCommand('ng2-module john/test', 'Creates the john/test module');
   logCommand('ng2-module john/test1 john/test2 john/test3', 'Creates the john/test{1,2,3} modules');
@@ -45,7 +44,6 @@ cli.help = function(){
 cli.parse(process.argv);
 
 if (!cli.args.length) cli.help();
-
 
 cli.owner && info("Using owner", cli.owner);
 
