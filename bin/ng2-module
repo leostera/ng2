@@ -1,0 +1,37 @@
+#!/usr/bin/env node
+
+/**
+ *  Module dependencies.
+ */
+
+var cli     = require('commander');
+var path    = require('path');
+var pkg     = require('../package.json');
+var version = pkg.version;
+var colors  = require('colors');
+var utils = require('../lib/utils');
+var log = utils.log;
+var info = utils.info;
+var unique = require('lodash').unique;
+var create = require('../lib/module').create;
+
+/*
+ * cli
+ */
+
+cli
+  .version(version)
+  .option('-v, --verbose', 'verbose mode')
+
+cli
+  .command('*')
+  .description('\t\tscaffold modules'.grey)
+  .action(function () {
+    var args = Array.prototype.slice.call(arguments, 0);
+    var opts = args.pop();
+    var names = unique(args);
+    info("Creating modules:", names);
+    names.forEach(create);
+  });
+
+cli.parse(process.argv);
