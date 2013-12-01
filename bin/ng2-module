@@ -23,7 +23,7 @@ var mod = require('../lib/module');
 cli
   .version(version)
   .option('-v, --verbose', 'verbose mode')
-  .option('-o, --owner <name>', 'take the first parameter as the owner')
+  .option('--owner <name>', 'take the first parameter as the owner')
 
 cli
   .command('*')
