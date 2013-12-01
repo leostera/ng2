@@ -46,21 +46,19 @@ cli.parse(process.argv);
 
 if (!cli.args.length) cli.help();
 
-var args = Array.prototype.slice.call(cli.args, 0);
-var opts = args.pop();
 
 cli.owner && info("Using owner", cli.owner);
 
-args = unique(args);
+cli.args = unique(cli.args);
 
-if(!args.length) {
+if(!cli.args.length) {
   error('No module names!');
   log('Module names should be specified for ng2-module to do something.');
   log('Run ng2 module --help for help.');
   process.exit(1);
 }
 
-var names = args.map(function (name) {
+var names = cli.args.map(function (name) {
 
   info("Validating module name:", name);
 
