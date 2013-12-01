@@ -4,6 +4,7 @@
  * Module dependencies.
  */
 
+var spawn = require('child_process').spawn;
 var cli = require('commander');
 var join = require('path').join;
 var pkg = require('../package.json');
@@ -20,7 +21,7 @@ var args = process.argv.splice(2);
 
 // setup process end message
 process.on('exit', function () {
-  log("OK");
+  log("OK".green.bold);
 });
 
 process.abort = function (message) {
@@ -52,11 +53,22 @@ if(!args.length) {
   log('Starting new app at', root);
   bootstrapper.start(root);
 } else {
-  if(bins.indexOf(args[0])!==-1) {
-    info("Invoking",args[0]);
+  var command = args[0];
+  var isCommand = bins.indexOf(command) !== -1;
+
+  if(isCommand) {
+    // loose the command from the args
+    args.splice(0,1);
+    info("Invoking", command, "with", args);
+
+    spawn('ng2-'+command, args, {
+      stdio: 'inherit'
+    });
 
   } else {
     var path = args.shift() || '.';
-    bootstrapper.start(join(root, path));
+    path = join(root, path);
+    log('Starting new app at', path);
+    bootstrapper.start(path);
   }
 }
