@@ -70,6 +70,20 @@ if(!args.length) {
         code !== 0 && process.abort();
       });
 
+  } else if (command === '--help' || command === '-h') {
+    log("ng2",'v'+version);
+    log();
+    log("Usage:");
+    log();
+    log("Simply call ng2 like this:", "ng2 <plugin-name> [params]");
+    log("for any of the following plugins:");
+    bins.forEach(function (bin) {
+      log("    *",bin);
+    });
+    log();
+    log("For help on any plugin, use the --help flag");
+    log("like this:", "ng2 <plugin-name> --help");
+    log()
   } else {
     var path = args.shift() || '.';
     path = join(root, path);
