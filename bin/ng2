@@ -77,25 +77,30 @@ if(!args.length) {
 } else {
   var command = args[0];
   var generator = args[1];
+  var modulePath = join(root,'modules',args[0]);
+
+  var isModule = exists(modulePath);
   var isCommand = bins.indexOf(command) !== -1;
   var isGenerator = generators.indexOf(generator) !== -1;
 
-  if(isGenerator) {
+  info('isModule', isModule);
+  info('isCommand', isCommand);
+  info('isGenerator', isGenerator);
+
+  if(isModule) {
+    process.chdir(modulePath);
+
     var moduleName = args.shift();
-    var template = args.shift();
-    
-    info("Invoking", template, "with", args, "inside", moduleName);
 
-    var modulePath = join(root,'modules',moduleName);
-
-    if(exists(modulePath)) {
-      process.chdir(modulePath);
+    if(isGenerator) {
+      generator = args.shift();
+    } else {
+      generator = 'scaffolder';
     }
-
-    spawn('ng2-'+template, args, { stdio: 'inherit' })
-      .on('exit', function (code) {
-        code !== 0 && process.abort();
-      });
+    info("Invoking", generator, "with", args, "inside", moduleName);
+  
+    spawn('ng2-'+generator, args, { stdio: 'inherit' })
+      .on('exit', exitLoudly);
 
   } else if(isCommand) {
 
@@ -104,9 +109,7 @@ if(!args.length) {
     info("Invoking", command, "with", args);
 
     spawn('ng2-'+command, args, { stdio: 'inherit' })
-      .on('exit', function (code) {
-        code !== 0 && process.abort();
-      });
+      .on('exit', exitLoudly);
 
   } else {
 
@@ -152,4 +155,8 @@ function help () {
   log("For additional help on any plugin, use the --help flag");
   log("like this:", "ng2 <plugin-name> --help");
   log()
+}
+
+function exitLoudly (code) {
+  code !== 0 && process.abort();
 }
