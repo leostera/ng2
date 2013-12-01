@@ -20,12 +20,16 @@ var bootstrapper = require('../lib/bootstrapper');
 var args = process.argv.splice(2);
 
 // setup process end message
-process.on('exit', function () {
-  log("OK".green.bold);
+process.on('exit', function (code) {
+  if(code===0) {
+    log("OK".green.bold);
+  } else {
+    error("NOT OK".red.bold);
+  }
 });
 
 process.abort = function (message) {
-  error(message);
+  message && error(message);
   process.exit(1);
 }
 
@@ -61,9 +65,10 @@ if(!args.length) {
     args.splice(0,1);
     info("Invoking", command, "with", args);
 
-    spawn('ng2-'+command, args, {
-      stdio: 'inherit'
-    });
+    spawn('ng2-'+command, args, { stdio: 'inherit' })
+      .on('exit', function (code) {
+        code !== 0 && process.abort();
+      });
 
   } else {
     var path = args.shift() || '.';
