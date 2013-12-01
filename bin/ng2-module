@@ -23,7 +23,7 @@ var mod = require('../lib/module');
 cli
   .version(version)
   .option('-v, --verbose', 'verbose mode')
-  .option('-o, --owner', 'the modules owner')
+  .option('-o, --owner <name>', 'take the first parameter as the owner')
 
 cli
   .command('*')
@@ -31,12 +31,15 @@ cli
   .action(function () {
     var args = Array.prototype.slice.call(arguments, 0);
     var opts = args.pop();
+
+    cli.owner && info("Using owner", cli.owner);
+
     var names = unique(args).map(function (name) {
 
       info("Validating module name:", name);
 
       var valid = mod.isValidName(name);
-      var owner = opts.owner;
+      var owner = cli.owner;
 
       if(owner && !valid) {
         name = owner+'/'+name;
