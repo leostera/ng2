@@ -21,8 +21,11 @@ $ component install
 Now you can start creating modules and after that, resources, like this:
 
 ```
-$ ng2 module login comments navbar
+$ ng2 module leostera/login
+$ ng2 module --owner=leostera navbar comments
 ```
+
+The `--owner` option is a shortcut so you don't have to add the prefix to every module when creating more than one.
 
 And you already have 3 modules created for you. Scaffolding resources is just as easy:
 
