@@ -24,46 +24,73 @@ cli
   .version(version)
   .option('--owner <name>', 'take the first parameter as the owner')
 
-cli
-  .command('*')
-  .description('\t\tscaffold modules'.grey)
-  .action(function () {
-    var args = Array.prototype.slice.call(arguments, 0);
-    var opts = args.pop();
-
-    cli.owner && info("Using owner", cli.owner);
-
-    var names = unique(args).map(function (name) {
-
-      info("Validating module name:", name);
-
-      var valid = mod.isValidName(name);
-      var owner = cli.owner;
-
-      if(owner && !valid) {
-        name = owner+'/'+name;
-        info("Not valid! Setting the owner from options:", name);
-        return name;
-      } else if(valid) {
-        info("Valid! Move along...", name);
-        return name;
-      } else {
-        error(name, 'is not a valid module name.');
-        error('A valid name would be: josephuno/navbar');
-
-        log("Check the --owner flag to mass set the"
-          , "[owner/][module name] for a list of modules");
-
-        log("No module has been created.");
-
-        process.exit(1);
-      }
-    });
-
-    info("Creating modules:", names);
-    names.forEach(mod.create);
-
-    log('check `ng2 --help` for help on generators');
-  });
+cli.help = function(){
+  var logCommand = function (command, description) {
+    var tabs = '  ';
+    log(tabs, '$', command);
+    log(tabs, tabs, description);
+    log();
+  }
+  log('Usage:');
+  log('');
+  logCommand('ng2-module --help', 'Shows this help.');
+  logCommand('ng2-module --h', 'Also shows this help.');
+  logCommand('ng2-module --ownder=john test', 'Creates the john/test module');
+  logCommand('ng2-module john/test', 'Creates the john/test module');
+  logCommand('ng2-module john/test1 john/test2 john/test3', 'Creates the john/test{1,2,3} modules');
+  logCommand('ng2-module --ownder=john test1 test2 test3', 'Creates the john/test{1,2,3} modules');
+  process.exit(0);
+};
 
 cli.parse(process.argv);
+
+if (!cli.args.length) cli.help();
+
+var args = Array.prototype.slice.call(cli.args, 0);
+var opts = args.pop();
+
+cli.owner && info("Using owner", cli.owner);
+
+args = unique(args);
+
+if(!args.length) {
+  error('No module names!');
+  log('Module names should be specified for ng2-module to do something.');
+  log('Run ng2 module --help for help.');
+  process.exit(1);
+}
+
+var names = args.map(function (name) {
+
+  info("Validating module name:", name);
+
+  var valid = mod.isValidName(name);
+  var owner = cli.owner;
+
+  if(owner && !valid) {
+    name = owner+'/'+name;
+    info("Not valid! Setting the owner from options:", name);
+    return name;
+  } else if(valid) {
+    info("Valid! Move along...", name);
+    return name;
+  } else {
+    error(name, 'is not a valid module name.');
+    error('A valid name would be: josephuno/navbar');
+
+    log("Check the --owner flag to mass set the"
+      , "[owner/][module name] for a list of modules");
+
+    log("No module has been created.");
+
+    process.exit(1);
+  }
+});
+
+if(names.length) {
+  info("Creating modules:", names);
+  names.forEach(mod.create);
+  log('check `ng2 --help` for help on generators');
+} else {
+  error("Somehow, you passed module names but we screwed it up.");
+}
