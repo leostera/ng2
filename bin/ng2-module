@@ -63,6 +63,8 @@ cli
 
     info("Creating modules:", names);
     names.forEach(mod.create);
+    
+    log('check `ng2 --help` for help on generators');
   });
 
 cli.parse(process.argv);
