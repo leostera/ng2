@@ -26,7 +26,9 @@
     "commander": "~2.0.0",
     "colors": "~0.6.2",
     "lodash": "~2.0.0",
-    "underscore.string": "~2.3.3"
+    "underscore.string": "~2.3.3",
+    "mkdirp": "~0.3.5",
+    "connect": "~2.11.1"
   },
   "peerDependencies": {
     "component": "*"
@@ -34,8 +36,7 @@
   "bin": {
     "ng2": "./bin/ng2",
     "ng2-controller": "./bin/ng2-controller",
-    "ng2-service": "./bin/ng2-service",
-    "ng2-view": "./bin/ng2-view",
+    "ng2-server": "./bin/ng2-server",
     "ng2-module": "./bin/ng2-module"
   }
 }
