@@ -12,8 +12,9 @@ var colors  = require('colors');
 var utils = require('../lib/utils');
 var log = utils.log;
 var info = utils.info;
+var error = utils.error;
 var unique = require('lodash').unique;
-var create = require('../lib/module').create;
+var mod = require('../lib/module');
 
 /*
  * cli
@@ -22,6 +23,7 @@ var create = require('../lib/module').create;
 cli
   .version(version)
   .option('-v, --verbose', 'verbose mode')
+  .option('-o, --owner', 'the modules owner')
 
 cli
   .command('*')
@@ -29,9 +31,35 @@ cli
   .action(function () {
     var args = Array.prototype.slice.call(arguments, 0);
     var opts = args.pop();
-    var names = unique(args);
+    var names = unique(args).map(function (name) {
+
+      info("Validating module name:", name);
+
+      var valid = mod.isValidName(name);
+      var owner = opts.owner;
+
+      if(owner && !valid) {
+        name = owner+'/'+name;
+        info("Not valid! Setting the owner from options:", name);
+        return name;
+      } else if(valid) {
+        info("Valid! Move along...", name);
+        return name;
+      } else {
+        error(name, 'is not a valid module name.');
+        error('A valid name would be: josephuno/navbar');
+
+        log("Check the --owner flag to mass set the"
+          , "[owner/][module name] for a list of modules");
+
+        log("No module has been created.");
+
+        process.exit(1);
+      }
+    });
+
     info("Creating modules:", names);
-    names.forEach(create);
+    names.forEach(mod.create);
   });
 
 cli.parse(process.argv);
