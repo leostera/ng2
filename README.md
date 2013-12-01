@@ -107,10 +107,7 @@ in any other component.io project you have and since the repo is public, anyone 
 
 ```
 ○ ng2 --help
-
 log:  It worked if it ends with OK
-log:  ng2 v0.2.0
-log:
 log:  Usage:
 log:
 log:    ng2 <app-name> [options]
@@ -133,7 +130,6 @@ log:
 log:
 log:  Generators:
 log:      * controller
-log:
 log:
 log:  Plugins: (generators are plugins, too)
 log:      * controller
