@@ -9,8 +9,7 @@ var join = require('path').join;
 var exists = require('fs').existsSync;
 var read = require('fs').createReadStream;
 var root = process.cwd();
-var utils = require('ng2').utils;
-var log = utils.log;
+var log = require('../lib/utils').log;
 var index = join(root,'index.html');
 
 /*
@@ -34,4 +33,4 @@ connect()
 	  res.writeHead(200);
 	  read(index).pipe(res);
 	}.bind(this))
-	.listen(port || 9000);
+	.listen(9000);
