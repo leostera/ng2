@@ -1,12 +1,4 @@
 /*
- * Module dependencies.
- */
-
-var scaffolder = require('./lib/scaffolder');
-var module = require('./lib/module');
-var utils = require('./lib/utils')
-
-/*
  * Expose module.
  */
 
@@ -16,28 +8,22 @@ module.exports = main = {};
  * Expose the utils module
  */
  
-main.utils = utils;
+main.utils = require('./lib/utils');
 
 /*
  * Make sure we have everything we need before we start.
  */
 
-main.bootstrap = function () {
-  // body...
-}
+main.bootstrapper = require('./lib/bootstrapper');
 
 /* 
  * Scaffold a resource within a module
  */
 
-main.scaffold = function () {
-  // body...
-}
+main.scaffolder = require('./lib/scaffolder')
 
 /*
  * Scaffold a module
  */
 
-main.module = function () {
-  // body...
-}
+main.module = require('./lib/module');
