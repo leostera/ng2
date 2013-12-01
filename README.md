@@ -108,34 +108,41 @@ in any other component.io project you have and since the repo is public, anyone 
 ```
 ○ ng2 --help
 
-  Usage:
-  
-  ng2 <app-name> [options]
-  
-      Create a folder <app-name> and start a new application inside.
-  
-      If a <path> is specified then it will start it in such path
-      and the application name will be the name of the last directory.
-  
-  ng2 [options] module <module-name>
-  
-      Scaffold a new module named <module-name>.
-  
-  ng2 <module-name> [options] [generator] [params [, more params]]
-  
-      It will use one of the following generators within the specified
-      module named <module-name>:
-
-  Generators:
-
-    controller <name>           scaffold a controller
-    service    <name>           scaffold a service
-    view       <name>           scaffold a view
-
-  Options:
-
-    -h, --help     output usage information
-    -V, --version  output the version number
-    -v, --verbose  verbose mode
+log:  It worked if it ends with OK
+log:  ng2 v0.2.0
+log:
+log:  Usage:
+log:
+log:    ng2 <app-name> [options]
+log:
+log:      Create a folder <app-name> and start a new application inside.
+log:      If a <path> is specified then it will start it in such path
+log:      and the application name will be the name of the last directory.
+log:
+log:
+log:    ng2 [options] module <module-name>
+log:
+log:      Scaffold a new module named <module-name>.
+log:
+log:
+log:    ng2 <module-name> [options] [generator] [params [, more params]]
+log:
+log:      It will use one of the following generators within the specified
+log:      module named <module-name>.
+log:
+log:
+log:  Generators:
+log:      * controller
+log:
+log:
+log:  Plugins: (generators are plugins, too)
+log:      * controller
+log:      * module
+log:      * server
+log:
+log:  For additional help on any plugin, use the --help flag
+log:  like this: ng2 <plugin-name> --help
+log:
+log:  OK
 
 ```

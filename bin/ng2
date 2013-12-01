@@ -19,6 +19,8 @@ var root = process.cwd();
 var bootstrapper = require('../lib/bootstrapper');
 var args = process.argv.splice(2);
 
+log("It worked if it ends with OK");
+
 // setup process end message
 process.on('exit', function (code) {
   if(code===0) {
@@ -45,6 +47,11 @@ bins = bins.map(function (bin) {
   return bin.replace('ng2-','');
 });
 info();
+
+var generators = bins.filter(function (bin) {
+  if(bin==='module' || bin === 'server') return;
+  return bin;
+});
 
 info('ng2 invoked with parameters:');
 info();
@@ -75,13 +82,35 @@ if(!args.length) {
     log();
     log("Usage:");
     log();
-    log("Simply call ng2 like this:", "ng2 <plugin-name> [params]");
-    log("for any of the following plugins:");
+    log("  ng2 <app-name> [options]");
+    log();
+    log("    Create a folder <app-name> and start a new application inside.");
+    log("    If a <path> is specified then it will start it in such path");
+    log("    and the application name will be the name of the last directory.");
+    log();
+    log();
+    log("  ng2 [options] module <module-name>");
+    log();
+    log("    Scaffold a new module named <module-name>.");
+    log();
+    log();
+    log("  ng2 <module-name> [options] [generator] [params [, more params]]");
+    log();
+    log("    It will use one of the following generators within the specified");
+    log("    module named <module-name>.");
+    log();
+    log();
+    log("Generators:");
+    generators.forEach(function (bin) {
+      log("    *",bin);
+    });
+    log();
+    log("Plugins: (generators are plugins, too)");
     bins.forEach(function (bin) {
       log("    *",bin);
     });
     log();
-    log("For help on any plugin, use the --help flag");
+    log("For additional help on any plugin, use the --help flag");
     log("like this:", "ng2 <plugin-name> --help");
     log()
   } else {
