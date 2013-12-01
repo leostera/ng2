@@ -1,0 +1,37 @@
+#!/usr/bin/env node
+
+/**
+ *  Module dependencies.
+ */
+
+var connect = require('connect');
+var join = require('path').join;
+var exists = require('fs').existsSync;
+var read = require('fs').createReadStream;
+var root = process.cwd();
+var utils = require('ng2').utils;
+var log = utils.log;
+var index = join(root,'index.html');
+
+/*
+ * Very, very small webserver.
+ */
+
+connect()
+	.use(connect.logger('dev'))
+	.use(function (req, res, next) {
+	  log(req.originalUrl);
+	  var originalUrl = join(root,req.originalUrl);
+	  if(!exists(originalUrl)) {
+	    res.writeHead(200);
+	    read(index).pipe(res);
+	  } else {
+	    next();
+	  }
+	}.bind(this))
+	.use(connect.static(root))
+	.use(function (req, res, next) {
+	  res.writeHead(200);
+	  read(index).pipe(res);
+	}.bind(this))
+	.listen(port || 9000);
