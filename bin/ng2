@@ -12,6 +12,7 @@ var version = pkg.version;
 var colors = require('colors');
 var utils = require('../lib/utils');
 var readdir = require('fs').readdirSync;
+var exists = require('fs').existsSync;
 var info = utils.info;
 var log = utils.log;
 var error = utils.error;
@@ -75,9 +76,29 @@ if(!args.length) {
   bootstrapper.start(root);
 } else {
   var command = args[0];
+  var generator = args[1];
   var isCommand = bins.indexOf(command) !== -1;
+  var isGenerator = generators.indexOf(generator) !== -1;
 
-  if(isCommand) {
+  if(isGenerator) {
+    var moduleName = args.shift();
+    var template = args.shift();
+    
+    info("Invoking", template, "with", args, "inside", moduleName);
+
+    var modulePath = join(root,'modules',moduleName);
+
+    if(exists(modulePath)) {
+      process.chdir(modulePath);
+    }
+
+    spawn('ng2-'+template, args, { stdio: 'inherit' })
+      .on('exit', function (code) {
+        code !== 0 && process.abort();
+      });
+
+  } else if(isCommand) {
+
     // loose the command from the args
     args.splice(0,1);
     info("Invoking", command, "with", args);
@@ -86,11 +107,14 @@ if(!args.length) {
       .on('exit', function (code) {
         code !== 0 && process.abort();
       });
+
   } else {
+
     var path = args.shift() || '.';
     path = join(root, path);
     log('Starting new app at', path);
     bootstrapper.start(path);
+
   }
 }
 
