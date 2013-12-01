@@ -1,0 +1,52 @@
+#!/usr/bin/env node
+
+/**
+ *  Module dependencies.
+ */
+
+var cli = require('commander');
+var path = require('path');
+var pkg = require('../package.json');
+var version = pkg.version;
+var colors = require('colors');
+var utils = require('../lib/utils');
+var log = utils.log;
+var info = utils.info;
+var error = utils.error;
+var unique = require('lodash').unique;
+var scaffold = require('../lib/scaffolder').scaffold;
+
+/*
+ * cli
+ */
+
+cli
+  .version(version)
+
+cli.help = function(){
+  var logCommand = function (command, description) {
+    var tabs = '  ';
+    log(tabs, '$', command);
+    log(tabs, tabs, description);
+    log();
+  }
+  log('Usage:');
+  log('');
+  logCommand('ng2-scaffolder --help', 'Shows this help.');
+  logCommand('ng2-scaffolder --h', 'Also shows this help.');
+  logCommand('ng2-scaffolder <template> <name>', 'Creates a file <name> using <template> as a base');
+  logCommand('ng2-scaffolder controller navbar dropdowns another'
+    , 'Creates the 3 controllers: navbar, dropdowns, and another');
+  process.exit(0);
+};
+
+cli.parse(process.argv);
+
+if (!cli.args.length) cli.help();
+
+var template = cli.args.shift();
+
+cli.args.forEach(function (name) {
+  var moduleName = process.cwd().split(path.sep).pop();
+  scaffold(moduleName, template, name);
+});
