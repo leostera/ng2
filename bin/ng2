@@ -19,7 +19,12 @@ var root = process.cwd();
 var bootstrapper = require('../lib/bootstrapper');
 var args = process.argv.splice(2);
 
-log("It worked if it ends with OK");
+if(args[0] === '-v' || args[0] === '--version') {
+  console.log(version);
+  process.exit(0);
+}
+
+log("It works if it ends with OK");
 
 // setup process end message
 process.on('exit', function (code) {
@@ -53,6 +58,11 @@ var generators = bins.filter(function (bin) {
   return bin;
 });
 
+if(args[0] === '-h' || args[0] === '--help') {
+  help();
+  process.exit(0);
+}
+
 info('ng2 invoked with parameters:');
 info();
 args.forEach(function (param) {
@@ -76,47 +86,46 @@ if(!args.length) {
       .on('exit', function (code) {
         code !== 0 && process.abort();
       });
-
-  } else if (command === '--help' || command === '-h') {
-    log("ng2",'v'+version);
-    log();
-    log("Usage:");
-    log();
-    log("  ng2 <app-name> [options]");
-    log();
-    log("    Create a folder <app-name> and start a new application inside.");
-    log("    If a <path> is specified then it will start it in such path");
-    log("    and the application name will be the name of the last directory.");
-    log();
-    log();
-    log("  ng2 [options] module <module-name>");
-    log();
-    log("    Scaffold a new module named <module-name>.");
-    log();
-    log();
-    log("  ng2 <module-name> [options] [generator] [params [, more params]]");
-    log();
-    log("    It will use one of the following generators within the specified");
-    log("    module named <module-name>.");
-    log();
-    log();
-    log("Generators:");
-    generators.forEach(function (bin) {
-      log("    *",bin);
-    });
-    log();
-    log("Plugins: (generators are plugins, too)");
-    bins.forEach(function (bin) {
-      log("    *",bin);
-    });
-    log();
-    log("For additional help on any plugin, use the --help flag");
-    log("like this:", "ng2 <plugin-name> --help");
-    log()
   } else {
     var path = args.shift() || '.';
     path = join(root, path);
     log('Starting new app at', path);
     bootstrapper.start(path);
   }
+}
+
+function help () {
+  log("Usage:");
+  log();
+  log("  ng2 <app-name> [options]");
+  log();
+  log("    Create a folder <app-name> and start a new application inside.");
+  log("    If a <path> is specified then it will start it in such path");
+  log("    and the application name will be the name of the last directory.");
+  log();
+  log();
+  log("  ng2 module [options] <module-name>");
+  log();
+  log("    Scaffold a new module named <module-name>.");
+  log();
+  log();
+  log("  ng2 <module-name> [generator] [options] [params [, more params]]");
+  log();
+  log("    It will use one of the following generators within the specified");
+  log("    module named <module-name>.");
+  log();
+  log();
+  log("Generators:");
+  generators.forEach(function (bin) {
+    log("    *",bin);
+  });
+  log();
+  log("Plugins: (generators are plugins, too)");
+  bins.forEach(function (bin) {
+    log("    *",bin);
+  });
+  log();
+  log("For additional help on any plugin, use the --help flag");
+  log("like this:", "ng2 <plugin-name> --help");
+  log()
 }
