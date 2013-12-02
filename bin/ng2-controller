@@ -46,4 +46,5 @@ if (!cli.args.length) cli.help();
 cli.args.forEach(function (name) {
   var moduleName = process.cwd().split(path.sep).pop();
   scaffold(moduleName, 'controller', name);
+  scaffold(moduleName, 'test.unit.controller', name);
 });
