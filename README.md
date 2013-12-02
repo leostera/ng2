@@ -70,15 +70,19 @@ sampleApp
       |-- config.js
       |-- routes.js
    |-- login
-      |-- login.js
-      |-- login-form.html
+      |-- controllers
+         |-- login.js
+      |-- views
+         |-- login-form.html
       |-- component.json
       |-- index.js
       |-- config.js
       |-- routes.js
    |-- navbar
-      |-- navbar.js
-      |-- navbar.html
+      |-- controllers
+         |-- navbar.js
+      |-- views
+         |-- navbar.html
       |-- component.json
       |-- index.js
 
