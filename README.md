@@ -4,6 +4,16 @@
 
 I started this project because I wanted something like `rails g` but for Angular but I didn't want the bloat that most generators out there have. So far this does the job alright in being very lean, extendable and fast enough for my slowest computer not to complain. Everyone is invited to collaborate and make this a tool we can all enjoy using.
 
+`ng2` is aimed at angular.js only, so there's no need to compromise for generality, thou it makes some choices for you:
+
+* Your app will be composed of discrete CommonJS modules you install with component.io or that you scaffold using ng2
+
+* Your app gets concatenated and served altogether from a single .js and .css files
+
+* You want to reuse as much code possible from others, share all you can code with others, and write the least amount of code possible to make something work
+
+It's the rough equivalent to rails generators (far less sophisticated yet, but we'll get there eventually) that uses a package manager (component) similar to npm (in some ways), and lets you use a synchronous require call (thus no more ugly AMD/UMD definitions and such).
+
 ## Installation 
 As a regular node cli tool, you can install this with `npm --global install ng2`.
 
