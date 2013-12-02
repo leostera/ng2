@@ -8,14 +8,14 @@
   <ng-view></ng-view>
   <script src="build/build.js"></script>
   <script>
-  window.angular = require('angular');
+  angular = require('angular');
   require('angular-route');
   
   // Add other requires here
-  
-  bootstrap = require('main');
-  var app = bootstrap("${app}", [
-    // your dependencies here
+  // require('yourModule');
+
+  angular.module("${app}", [
+    // 'yourModule'
     ]);
   </script>
 </body>
