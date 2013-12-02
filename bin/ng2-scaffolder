@@ -43,7 +43,7 @@ cli.help = function(){
   log('Available templates:');
   var templates = readdir(path.resolve(__dirname,'../lib/templates'));
   templates.forEach(function (t) {
-    if(/^\./.test(t) || /component/.test(t)) return;
+    if(/^\./.test(t) || /index/.test(t) || /component/.test(t)) return;
     t = t.split('.')
     t.pop();
     t = t.join('.');
