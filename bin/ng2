@@ -66,7 +66,7 @@ info();
 
 var templates = readdir(resolve(__dirname,'../lib/templates'))
   .map(function (t) {
-    if(/^\./.test(t) || /component/.test(t)) return;
+    if(/^\./.test(t) || /index/.test(t) || /component/.test(t)) return;
     t = t.split('.')
     t.pop();
     t = t.join('.');
@@ -77,7 +77,7 @@ var templates = readdir(resolve(__dirname,'../lib/templates'))
   });
 
 var generators = bins.filter(function (bin) {
-  if(bin==='module' || bin === 'server' || bin === 'scaffolder') return;
+  if(templates.indexOf(bin) === -1) return;
   return bin;
 });
 
