@@ -1,0 +1,35 @@
+#!/usr/bin/env node
+
+/**
+ *  Module dependencies.
+ */
+
+var str2js = require('string-to-js');
+var write = require('fs').writeFileSync;
+var readFile = require('fs').readFileSync;
+var join = require('path').join;
+var utils = require('../lib/utils');
+var read = utils.readFileToObject;
+var log = utils.log;
+var info = utils.info;
+var error = utils.error;
+var root = process.cwd();
+
+var mainComponent = join(root, 'component.json');
+read(mainComponent)
+  .local
+  .forEach(function (mod) {
+    var component = join(root,'modules',mod,'component.json')
+    read(component)
+    .scripts
+    .forEach(function (script) {
+      if(/^views/.test(script)) {
+        var dest = join(root, 'modules', mod, script);
+        var src = dest.replace('.js', '.html');
+        var file = readFile(src).toString();
+        var js = str2js(file);
+        write(dest, js);
+        log('Compiled', join(mod,script), 'to js');
+      }
+    })
+  });
