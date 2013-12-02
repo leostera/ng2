@@ -29,7 +29,8 @@
     "underscore.string": "~2.3.3",
     "mkdirp": "~0.3.5",
     "connect": "~2.11.1",
-    "tail-array": "0.0.1"
+    "tail-array": "0.0.1",
+    "string-to-js": "0.0.1"
   },
   "peerDependencies": {
     "component": "*"
@@ -37,8 +38,9 @@
   "bin": {
     "ng2": "./bin/ng2",
     "ng2-scaffolder": "./bin/ng2-scaffolder",
+    "ng2-module": "./bin/ng2-module",
     "ng2-controller": "./bin/ng2-controller",
     "ng2-server": "./bin/ng2-server",
-    "ng2-module": "./bin/ng2-module"
+    "ng2-html2js": "./bin/ng2-html2js"
   }
 }
