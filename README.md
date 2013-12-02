@@ -30,16 +30,16 @@ The `--owner` option is a shortcut so you don't have to add the prefix to every 
 And you already have 3 modules created for you. Scaffolding resources is just as easy:
 
 ```
-$ ng2 login config
-$ ng2 login routes
+$ ng2 login script config
+$ ng2 login script routes
 $ ng2 login controller login logout
 $ ng2 login view login-form register-form
 
 $ ng2 navbar controller main
 $ ng2 navbar view navbar
 
-$ ng2 comments config
-$ ng2 comments routes
+$ ng2 comments script config
+$ ng2 comments script routes
 $ ng2 comments controller list edit
 $ ng2 comments view list edit
 $ ng2 comments filter search
@@ -102,6 +102,24 @@ component install <your-username>/<repo-name>
 
 in any other component.io project you have and since the repo is public, anyone can use it too! Isn't that neat?
 
+Ok, proceeding. now that you have all this stuff, you can just build it doing
+
+```
+component build
+```
+
+If you get an error like this one:
+> error : ENOENT, open '/Users/leostera/repos/ng2/test/test_7/modules/contact/views/form.js'
+
+that means you haven't compiled the html templates into javascript. You can do that by running
+
+```
+ng2 html2js
+```
+
+Now a regular `component build` should do it's work in a couple tens of milliseconds and the app is ready to be served by your webserver of choice, or just locally by running `ng2 server`.
+
+Notice there's a lot of functionality bundled with `ng2`, but it's not really tied to it. Read more about this in the [Plugins](#plugins) section.
 
 ## Usage
 If you find yourself in trouble, running `ng2 --help` is always useful.
@@ -150,3 +168,5 @@ Regularly you would use this as described in the [Getting Started](#getting-star
 The plugin system is very simple, it looks for binaries named `ng2-` and allows you to run them thru `ng2 <name>`. Some examples of this are `ng2-server` –callable as `ng2 server`– or  `ng2-scaffolder`, the default scaffolder.
 
 As you can see, there is also a `ng2-controller` binary. This is because  I want `ng2` to be easily extendable and customizable. Any generator will override the default `scaffolder`. You can still access the `scaffolder` as `ng2 scaffolder <template> [params]`. This way you can specify your very own `ng2 controller` behavior.
+
+The current bundled plugins are listed in the `./bin` folder in this very repo. Eventually, if necessary, they will be taken out of `ng2` and required as peerDeps.
