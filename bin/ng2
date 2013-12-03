@@ -20,27 +20,24 @@ var error = utils.error;
 var root = process.cwd();
 var bootstrapper = require('../lib/bootstrapper');
 var args = process.argv.splice(2);
+var endWithOk = false;
 
 if(args[0] === '-v' || args[0] === '--version') {
   console.log(version);
   process.exit(0);
 }
 
-utils.verbose = false;
-utils.prefix.log = false;
-
 args.forEach(function (a) {
   if(a === '--verbose') {
     utils.verbose = true;
+    args.splice(args.indexOf(a),1);
   }
-})
-
-log("It works if it ends with OK");
+});
 
 // setup process end message
 process.on('exit', function (code) {
   if(code===0) {
-    log("OK".green.bold);
+    endWithOk && log("OK".green.bold);
   } else {
     error("NOT OK".red.bold);
   }
@@ -81,7 +78,7 @@ var generators = bins.filter(function (bin) {
   return bin;
 });
 
-if(args[0] === '-h' || args[0] === '--help') {
+if(args[0] === '-h' || args[0] === '--help' || !args.length) {
   help();
   process.exit(0);
 }
@@ -92,6 +89,9 @@ args.forEach(function (param) {
   info('        *', param);
 });
 info();
+
+log("It works if it ends with OK");
+endWithOk = true;
 
 if(!args.length) {
   log('Starting new app at', root);
@@ -144,9 +144,12 @@ if(!args.length) {
 }
 
 function help () {
+  log("ng2 – a minimalistic, modular angular.js app generator");
+  log("see it on github – https://github.com/ng2/ng2");
+  log();
   log("Usage:");
   log();
-  log("  ng2 <app-name> [options]");
+  log("  ng2 <app-name-or-path>");
   log();
   log("    Create a folder <app-name> and start a new application inside.");
   log("    If a <path> is specified then it will start it in such path");
@@ -172,8 +175,21 @@ function help () {
   log();
   log("Plugins: (generators are plugins, too)");
   bins.forEach(function (bin) {
-    log("    *",bin);
+    log("    *", bin);
   });
+  log();
+  log();
+  log("Examples:");
+  log();
+  log("   * ng2 myApp")
+  log();
+  log("     creates a folder named myApp in the current directory and");
+  log("     an app named myApp in it");
+  log();
+  log("   * ng2 module login")
+  log();
+  log("     creates a module named login inside a current app");
+  log();
   log();
   log("For additional help on any plugin, call it without any parameters");
   log("like this:", "ng2 <plugin-name>;");
