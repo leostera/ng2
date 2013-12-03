@@ -29,7 +29,21 @@ if(args[0] === '-h' || args[0] === '--help') {
 cli
   .version(version)
 
-var help = function(){
+cli.parse(process.argv);
+
+if (!cli.args.length) help();
+
+var template = cli.args.shift();
+
+cli.args.forEach(function (name) {
+  var moduleName = process.cwd().split(path.sep).pop();
+  scaffold(moduleName, template, name);
+  if(!/test\./.test(template)) {
+    scaffold(moduleName, 'test.unit.'+template, name);
+  }
+});
+
+function help (){
   var logStruct = function (separator, command, description) {
     var tabs = '  ';
     log(tabs, separator, command);
@@ -57,17 +71,3 @@ var help = function(){
   log();
   process.exit(0);
 };
-
-cli.parse(process.argv);
-
-if (!cli.args.length) help();
-
-var template = cli.args.shift();
-
-cli.args.forEach(function (name) {
-  var moduleName = process.cwd().split(path.sep).pop();
-  scaffold(moduleName, template, name);
-  if(!/test\./.test(template)) {
-    scaffold(moduleName, 'test.unit.'+template, name);
-  }
-});

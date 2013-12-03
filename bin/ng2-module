@@ -30,23 +30,6 @@ cli
   .version(version)
   .option('--owner <name>', 'take the first parameter as the owner')
 
-var help = function(){
-  var logCommand = function (command, description) {
-    var tabs = '  ';
-    log(tabs, '$', command);
-    log(tabs, tabs, description);
-    log();
-  }
-  log('Usage:');
-  log('');
-  logCommand('ng2-module', 'Shows this help.');
-  logCommand('ng2-module --ownder=john test', 'Creates the john/test module');
-  logCommand('ng2-module john/test', 'Creates the john/test module');
-  logCommand('ng2-module john/test1 john/test2 john/test3', 'Creates the john/test{1,2,3} modules');
-  logCommand('ng2-module --ownder=john test1 test2 test3', 'Creates the john/test{1,2,3} modules');
-  process.exit(0);
-};
-
 cli.parse(process.argv);
 
 if (!cli.args.length) help();
@@ -96,3 +79,20 @@ if(names.length) {
 } else {
   error("Somehow, you passed module names but we screwed it up.");
 }
+
+function help (){
+  var logCommand = function (command, description) {
+    var tabs = '  ';
+    log(tabs, '$', command);
+    log(tabs, tabs, description);
+    log();
+  }
+  log('Usage:');
+  log('');
+  logCommand('ng2-module', 'Shows this help.');
+  logCommand('ng2-module --ownder=john test', 'Creates the john/test module');
+  logCommand('ng2-module john/test', 'Creates the john/test module');
+  logCommand('ng2-module john/test1 john/test2 john/test3', 'Creates the john/test{1,2,3} modules');
+  logCommand('ng2-module --ownder=john test1 test2 test3', 'Creates the john/test{1,2,3} modules');
+  process.exit(0);
+};
