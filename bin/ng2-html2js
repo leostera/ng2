@@ -14,22 +14,52 @@ var log = utils.log;
 var info = utils.info;
 var error = utils.error;
 var root = process.cwd();
+var args = process.argv.splice(2);
+
+if(args[0] === '-h' || args[0] === '--help') {
+  help();
+  process.exit(0);
+}
 
 var mainComponent = join(root, 'component.json');
-read(mainComponent)
-  .local
-  .forEach(function (mod) {
-    var component = join(root,'modules',mod,'component.json')
-    read(component)
-    .scripts
-    .forEach(function (script) {
-      if(/^views/.test(script)) {
-        var dest = join(root, 'modules', mod, script);
-        var src = dest.replace('.js', '.html');
-        var file = readFile(src).toString();
-        var js = str2js(file);
-        write(dest, js);
-        log('Compiled', join(mod,script), 'to js');
-      }
-    })
-  });
+var file = read(mainComponent);
+
+if(file) {
+  var local = file.local;
+  if(local.length) {
+    local.forEach(function (mod) {
+      var component = join(root,'modules',mod,'component.json')
+      read(component)
+      .scripts
+      .forEach(function (script) {
+        if(/^views/.test(script)) {
+          var dest = join(root, 'modules', mod, script);
+          var src = dest.replace('.js', '.html');
+          var file = readFile(src).toString();
+          var js = str2js(file);
+          write(dest, js);
+          log('Compiled', join(mod,script), 'to js');
+        }
+      })
+    });
+  } else {
+    error("No local modules to compile.");
+  } 
+} else {
+  error(mainComponent, "is not a readable file. Does it even exist?");
+}
+
+function help () {
+  log("ng2–html2js","– compile all html files into javascript modules");
+  log("see it on github – https://github.com/ng2/ng2");
+  log();
+  log("Usage:");
+  log();
+  log("  ng2 html2js");
+  log();
+  log("    Compiles all your .html files –included in the component.json modules");
+  log("    that are listed within the \"local\" property in the application's");
+  log("    component.json file– into .js files that can be bundled by running:");
+  log("      $ component build;");
+  log();
+}
