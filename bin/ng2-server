@@ -43,7 +43,7 @@ connect()
 	}.bind(this))
 	.listen(port, function () {
 		log("ng2–server listening on http://localhost:", port);
-		log("press ^C to kill it, or ^Z to put it in the background");
+		log("press ^C to kill it");
 	});
 
 function help () {
