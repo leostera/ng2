@@ -11,10 +11,18 @@ var read = require('fs').createReadStream;
 var root = process.cwd();
 var log = require('../lib/utils').log;
 var index = join(root,'index.html');
+var args = process.argv.splice(2);
+
+if(args[0] === '-h' || args[0] === '--help') {
+  help();
+  process.exit(0);
+}
 
 /*
  * Very, very small webserver.
  */
+
+var port = args[0] || 9000;
 
 connect()
 	.use(connect.logger('dev'))
@@ -33,4 +41,28 @@ connect()
 	  res.writeHead(200);
 	  read(index).pipe(res);
 	}.bind(this))
-	.listen(9000);
+	.listen(port, function () {
+		log("ng2–server listening on port", port);
+		log("press ^C to kill it, or ^Z to put it in the background");
+	});
+
+function help () {
+	log("ng2-server – a small web server to locally test your work")
+	log();
+	log("Usage:");
+	log();
+	log("    * ng2 server --help");
+	log();
+	log("      Shows this help");
+	log();
+	log("    * ng2 server");
+	log();
+	log("      Starts a web server that listens to port 9000.");
+	log("      It serves the specified file within the current folder,");
+	log("      or fallbacks to ./index.html");
+	log();
+	log("    * ng2 server 8080");
+	log();
+	log("      Starts a web server bound to port 8080 just like the above.");
+	log();
+}
