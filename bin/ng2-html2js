@@ -48,9 +48,9 @@ if(exists(mainComponent)) {
   } 
 } else {
   error(mainComponent, "does not exist.");
-  log();
   log("ng2-html2js needs a component.json file to read the local modules.");
   log("Are running this outside a component.io project?");
+  process.exit(1);
 }
 
 function help () {
