@@ -15,7 +15,7 @@ var info = utils.info;
 var error = utils.error;
 var unique = require('lodash').unique;
 var scaffold = require('../lib/scaffolder').scaffold;
-var args = process.argv.splice(2);
+var args = [].concat(process.argv).splice(2);
 
 if(args[0] === '-h' || args[0] === '--help') {
   help();

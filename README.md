@@ -24,7 +24,6 @@ Let's make a sample app here:
 ```
 $ ng2 sampleApp
 $ cd sampleApp
-$ npm install
 $ component install
 ```
 
