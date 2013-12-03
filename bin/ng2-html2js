@@ -6,6 +6,7 @@
 
 var str2js = require('string-to-js');
 var write = require('fs').writeFileSync;
+var exists = require('fs').existsSync;
 var readFile = require('fs').readFileSync;
 var join = require('path').join;
 var utils = require('../lib/utils');
@@ -22,9 +23,9 @@ if(args[0] === '-h' || args[0] === '--help') {
 }
 
 var mainComponent = join(root, 'component.json');
-var file = read(mainComponent);
 
-if(file) {
+if(exists(mainComponent)) {
+  var file = read(mainComponent);
   var local = file.local;
   if(local.length) {
     local.forEach(function (mod) {
@@ -46,7 +47,10 @@ if(file) {
     error("No local modules to compile.");
   } 
 } else {
-  error(mainComponent, "is not a readable file. Does it even exist?");
+  error(mainComponent, "does not exist.");
+  log();
+  log("ng2-html2js needs a component.json file to read the local modules.");
+  log("Are running this outside a component.io project?");
 }
 
 function help () {
