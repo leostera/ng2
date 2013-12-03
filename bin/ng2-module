@@ -15,6 +15,12 @@ var info = utils.info;
 var error = utils.error;
 var unique = require('lodash').unique;
 var mod = require('../lib/module');
+var args = process.argv.splice(2);
+
+if(args[0] === '-h' || args[0] === '--help') {
+  help();
+  process.exit(0);
+}
 
 /*
  * cli
@@ -24,7 +30,7 @@ cli
   .version(version)
   .option('--owner <name>', 'take the first parameter as the owner')
 
-cli.help = function(){
+var help = function(){
   var logCommand = function (command, description) {
     var tabs = '  ';
     log(tabs, '$', command);
@@ -43,7 +49,7 @@ cli.help = function(){
 
 cli.parse(process.argv);
 
-if (!cli.args.length) cli.help();
+if (!cli.args.length) help();
 
 cli.owner && info("Using owner", cli.owner);
 
