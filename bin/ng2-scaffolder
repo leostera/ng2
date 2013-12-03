@@ -16,7 +16,12 @@ var info = utils.info;
 var error = utils.error;
 var unique = require('lodash').unique;
 var scaffold = require('../lib/scaffolder').scaffold;
+var args = process.argv.splice(2);
 
+if(args[0] === '-h' || args[0] === '--help') {
+  help();
+  process.exit(0);
+}
 /*
  * cli
  */
@@ -24,7 +29,7 @@ var scaffold = require('../lib/scaffolder').scaffold;
 cli
   .version(version)
 
-cli.help = function(){
+var help = function(){
   var logStruct = function (separator, command, description) {
     var tabs = '  ';
     log(tabs, separator, command);
@@ -55,7 +60,7 @@ cli.help = function(){
 
 cli.parse(process.argv);
 
-if (!cli.args.length) cli.help();
+if (!cli.args.length) help();
 
 var template = cli.args.shift();
 
