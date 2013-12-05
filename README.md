@@ -2,20 +2,20 @@
 
 ### Motivation
 
-I started this project because I wanted something like `rails g` but for Angular but I didn't want the bloat that most generators out there have. So far this does the job alright in being very lean, extendable and fast enough for my slowest computer not to complain. Everyone is invited to collaborate and make this a tool we can all enjoy using.
+I started this project because I wanted something like `rails g` but for Angular, and I didn't want the bloat that most generators out there have. So far this does the job alright in being very lean, extendable and fast enough for my slowest computer not to complain. Everyone is invited to collaborate and make this a tool we can all enjoy using.
 
-`ng2` is aimed at angular.js only, so there's no need to compromise for generality, thou it makes some choices for you:
+`ng2` is aimed at AngularJS only, so there's no need to compromise for generality, and it makes some choices for you:
 
-* Your app will be composed of discrete CommonJS modules you install with component.io or that you scaffold using ng2
+* Your app will be composed of discrete CommonJS modules you install with [component.io](https://github.com/component) or that you scaffold using ng2
 
-* Your app gets concatenated and served altogether from a single .js and .css files
+* Your app gets concatenated and served altogether from a single pair of .js and .css files
 
 * You want to reuse as much code possible from others, share all you can code with others, and write the least amount of code possible to make something work
 
 It's the rough equivalent to rails generators (far less sophisticated yet, but we'll get there eventually) that uses a package manager (component) similar to npm (in some ways), and lets you use a synchronous require call (thus no more ugly AMD/UMD definitions and such).
 
 ## Installation 
-As a regular node cli tool, you can install this with `npm --global install ng2`.
+As a regular node cli tool, you can install this with `npm --global install ng2`. It requires `component` as a `peerDep`.
 
 ## Getting started
 
@@ -97,7 +97,7 @@ sampleApp
 
 ```
 
-Where each of the modules you have in your application (under the app branch in that tree) are perfectly reusable and shareable CommonJS, component-io compatible modules. Something as easy as 
+Where each of the modules you have in your application (under the app branch in that tree) are perfectly reusable and shareable CommonJS, `component` compatible modules. Something as easy as 
 
 ```
 $ cd app/comments
@@ -107,13 +107,13 @@ $ git commit -am "Woo lets share!"
 $ git push
 ```
 
-Will get you a module you can install directly with a simple 
+(Provviding your github repo exists) Will get you a module you can install directly with a simple 
 
 ```
 component install <your-username>/<repo-name>
 ```
 
-in any other component.io project you have and since the repo is public, anyone can use it too! Isn't that neat?
+in any other `component` project you have and since the repo is public, anyone can use it too! Isn't that neat?
 
 Ok, proceeding. now that you have all this stuff, you can just build it doing
 
@@ -132,7 +132,7 @@ ng2 html2js
 
 Now a regular `component build` should do it's work in a couple tens of milliseconds and the app is ready to be served by your webserver of choice, or just locally by running `ng2 server`.
 
-Notice there's a lot of functionality bundled with `ng2`, but it's not really tied to it. Read more about this in the [Plugins](#plugins) section.
+Notice there's a lot of functionality bundled with `ng2`, thou it's not really tied to it. Read more about this in the [Plugins](#plugins) section.
 
 ## Usage
 If you find yourself in trouble, running `ng2 --help` is always useful.
@@ -178,8 +178,12 @@ log:  OK
 Regularly you would use this as described in the [Getting Started](#getting-started) section.
 
 ## Plugins
-The plugin system is very simple, it looks for binaries named `ng2-` and allows you to run them thru `ng2 <name>`. Some examples of this are `ng2-server` –callable as `ng2 server`– or  `ng2-scaffolder`, the default scaffolder.
+The plugin system is very simple, it looks for binaries named `ng2-` and allows you to run them thru `ng2 <name>`. Some examples of this are:
 
-As you can see, there is also a `ng2-controller` binary. This is because  I want `ng2` to be easily extendable and customizable. Any generator will override the default `scaffolder`. You can still access the `scaffolder` as `ng2 scaffolder <template> [params]`. This way you can specify your very own `ng2 controller` behavior.
+* `ng2-server` – callable as `ng2 server`.
+* `ng2-scaffolder` – the default scaffolder.
+* `ng2-module` – the module generator
 
-The current bundled plugins are listed in the `./bin` folder in this very repo. Eventually, if necessary, they will be taken out of `ng2` and required as peerDeps.
+As you can see, there is also a `ng2-controller` binary. This is because  I want `ng2` to be easily extendable and customizable. Any generator will override the default `scaffolder`. You can still access the `scaffolder` as `ng2 scaffolder <template> [params]`. This way you can specify your very own `ng2 controller` behavior but fallback to the original `scaffolder` if need be.
+
+The current bundled plugins are listed in the `./bin` folder in this very repo. Eventually, if necessary, they will be taken out of `ng2` and required as `peerDeps` or simply external modules.
