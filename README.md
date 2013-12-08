@@ -187,3 +187,7 @@ The plugin system is very simple, it looks for binaries named `ng2-` and allows 
 As you can see, there is also a `ng2-controller` binary. This is because  I want `ng2` to be easily extendable and customizable. Any generator will override the default `scaffolder`. You can still access the `scaffolder` as `ng2 scaffolder <template> [params]`. This way you can specify your very own `ng2 controller` behavior but fallback to the original `scaffolder` if need be.
 
 The current bundled plugins are listed in the `./bin` folder in this very repo. Eventually, if necessary, they will be taken out of `ng2` and required as `peerDeps` or simply external modules.
+
+
+[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/ng2/ng2/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
+
