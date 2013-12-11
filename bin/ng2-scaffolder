@@ -62,7 +62,7 @@ var template = cli.args.shift();
 cli.args.forEach(function (name) {
   var moduleName = process.cwd().split(path.sep).pop();
   scaffold(moduleName, template, name);
-  if(!/test\./.test(template)) {
+  if(!/(test\.|view)/.test(template)) {
     scaffold(moduleName, 'test.unit.'+template, name);
   }
 });
