@@ -15,6 +15,12 @@ var info = utils.info;
 var error = utils.error;
 var unique = require('lodash').unique;
 var scaffold = require('../lib/scaffolder').scaffold;
+var args = [].concat(process.argv).splice(2);
+
+if(args[0] === '-h' || args[0] === '--help') {
+  help();
+  process.exit(0);
+}
 
 /*
  * cli
@@ -23,7 +29,17 @@ var scaffold = require('../lib/scaffolder').scaffold;
 cli
   .version(version)
 
-cli.help = function(){
+cli.parse(process.argv);
+
+if (!cli.args.length) help();
+
+cli.args.forEach(function (name) {
+  var moduleName = process.cwd().split(path.sep).pop();
+  scaffold(moduleName, 'controller', name);
+  scaffold(moduleName, 'test.unit.controller', name);
+});
+
+function help () {
   var logCommand = function (command, description) {
     var tabs = '  ';
     log(tabs, '$', command);
@@ -38,13 +54,3 @@ cli.help = function(){
     , 'Creates the 3 controllers: navbar, dropdowns, and another');
   process.exit(0);
 };
-
-cli.parse(process.argv);
-
-if (!cli.args.length) cli.help();
-
-cli.args.forEach(function (name) {
-  var moduleName = process.cwd().split(path.sep).pop();
-  scaffold(moduleName, 'controller', name);
-  scaffold(moduleName, 'test.unit.controller', name);
-});
