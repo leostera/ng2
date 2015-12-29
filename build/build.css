@@ -405,7 +405,7 @@ nav {
   padding-top: 20px;
   color: #fdfdfe;
   background-color: #81d6dc;
-  background: #81d6dc url('images/logo.png') no-repeat center;
+  background: #81d6dc url('../images/logo.png') no-repeat center;
   background-size: 210px;
   height: 210px;
   text-align: center;
@@ -427,7 +427,7 @@ nav ul li a {
   height: 32px;
   padding-left: 40px;
   padding-top: 2px;
-  background: url(images/octocat.png) no-repeat;
+  background: url(../images/octocat.png) no-repeat;
   background-size: 32px 32px;
   color: #020201;
 }
@@ -440,19 +440,19 @@ nav ul li a:visited {
 
 
 /**
- * Fonts
+ * ../fonts
  */
 @font-face {
   font-family: "Bariol_Thin";
-  src: url('fonts/Bariol_Thin.otf') format('opentype');
+  src: url('../fonts/Bariol_Thin.otf') format('opentype');
 }
 @font-face {
   font-family: "Bariol_Light";
-  src: url('fonts/Bariol_Light.otf') format('opentype');
+  src: url('../fonts/Bariol_Light.otf') format('opentype');
 }
 @font-face {
   font-family: "Bariol_Bold";
-  src: url('fonts/Bariol_Bold.otf') format('opentype');
+  src: url('../fonts/Bariol_Bold.otf') format('opentype');
 }
 * {
   font-family: "Bariol_Light";
