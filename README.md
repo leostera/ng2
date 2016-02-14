@@ -1,5 +1,7 @@
 # ng2 – minimalistic, modular angular.js app generator
 
+> Note! Please keep in mind this project is unmaintained and it's not related to AngularJS v2.x
+
 ### Motivation
 
 I started this project because I wanted something like `rails g` but for Angular, and I didn't want the bloat that most generators out there have. So far this does the job alright in being very lean, extendable and fast enough for my slowest computer not to complain. Everyone is invited to collaborate and make this a tool we can all enjoy using.
